@@ -1,0 +1,67 @@
+<head>
+    <link rel="stylesheet" href="css/styles-crud.css">
+</head>
+
+<!-- modales.html -->
+<div id="modalAgregar" class="modal">
+    <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal('modalAgregar')">&times;</span>
+        <h2>Agregar Cliente</h2>
+        <form>
+            <div class="formCliente">
+                <label for="idAgregar">ID:</label>
+                <input type="text" id="idAgregar" name="id" required>
+            </div>
+
+            <div class="formCliente">
+                <label for="nombreAgregar">Nombre:</label>
+                <input type="text" id="nombreAgregar" name="nombre" required>
+            </div>
+            <div class="formCliente">
+                <label for="nivel">Nivel:</label>
+                <input type="number" id="nivel" name="nivel" required>
+            </div>
+
+            <label for="descripcionAgregar">Descripción:</label><br><br>
+            <textarea id="descripcionAgregar" class="descripcion-input" name="descripcion" required></textarea>
+
+
+            <div class="botones">
+                <button type="submit" class="dr-button">Confirmar</button>
+                <button type="submit" class="dr-button" onclick="cerrarModal('modalAgregar')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="modalEditar" class="modal">
+    <div class="modal-contenido">
+        <span class="cerrar" onclick="cerrarModal('modalEditar')">&times;</span>
+        <h2>Editar Cliente</h2>
+        <form>
+            <div class="formCliente">
+                <label for="idEditar">ID:</label>
+                <input type="text" id="idEditar" name="id" value="1234" required><br><br>
+            </div>
+
+            <div class="formCliente">
+                <label for="nombreEditar">Nombre:</label>
+                <input type="text" id="nombreEditar" name="nombre" value="Juan Valladares" required><br><br>
+            </div>
+
+            <div class="formCliente">
+                <label for="nivel">Nivel:</label>
+                <input type="number" id="nivel" name="nivel" required><br><br>
+            </div>
+
+            <label for="descripcionEditar">Descripción:</label><br><br>
+            <textarea id="descripcionEditar" class="descripcion-input" name="descripcion"
+                required>Dolor de huesos</textarea>
+
+            <div class="botones">
+                <button type="submit" class="dr-button">Confirmar</button>
+                <button type="submit" class="dr-button" onclick="cerrarModal('modalEditar')">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>

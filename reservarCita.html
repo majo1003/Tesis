@@ -1,0 +1,122 @@
+<head>
+    <link rel="stylesheet" href="css/styles-paciente.css">
+</head>
+
+<!-- Modal de Reserva -->
+<div id="modalReserva" class="modal">
+    <div class="modal-contenido">
+        <!-- Encabezado del Modal -->
+        <div class="modal-header">
+            <h2 class="modal-title">Reserva</h2>
+            <span class="close" onclick="cerrarModal('modalReserva')">&times;</span>
+        </div>
+        <!-- Contenido del Modal -->
+        <div class="modal-body">
+            <div class="modal-reserva-container">
+                <!-- Elemento y Descripción -->
+                <div class="detalle-elemento">
+                    <label for="elemento" class="dr-bold">Elemento:</label>
+                    <input type="text" id="elemento" value="Lorem" class="" readonly />
+                </div>
+                <div class="detalle-descripcion">
+                    <label for="descripcion" class="dr-bold">Descripción:</label><br>
+                    <textarea id="descripcion" class="textarea-caja" readonly>
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    </textarea>
+                </div>
+            </div>
+            <!-- Fecha -->
+            <div class="calendario">
+                <label class="dr-bold">Seleccionar fecha:</label>
+                <p class="fecha-seleccionada">Mon, Aug 17</p>
+                <!-- Calendario simulado -->
+                <div class="calendario-container">
+                    <p>August 2024</p>
+                    <!-- Tabla del calendario -->
+                    <table>
+                        <tr>
+                            <th>S</th>
+                            <th>M</th>
+                            <th>T</th>
+                            <th>W</th>
+                            <th>T</th>
+                            <th>F</th>
+                            <th>S</th>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>7</td>
+                            <td>8</td>
+                            <td>9</td>
+                            <td>10</td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td>12</td>
+                            <td>13</td>
+                            <td>14</td>
+                            <td>15</td>
+                            <td>16</td>
+                            <td class="selected">17</td>
+                        </tr>
+                        <tr>
+                            <td>18</td>
+                            <td>19</td>
+                            <td>20</td>
+                            <td>21</td>
+                            <td>22</td>
+                            <td>23</td>
+                            <td>24</td>
+                        </tr>
+                        <tr>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                            <td>29</td>
+                            <td>30</td>
+                            <td>31</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Horas Disponibles -->
+            <div class="horas-disponibles">
+                <label class="dr-bold">Horas disponibles:</label>
+                <ul>
+                    <li>7:00 <span class="reservado">Reservado</span></li>
+                    <li>8:00 <span class="reservado">Reservado</span></li>
+                    <li>9:00 <span class="reservado">Reservado</span></li>
+                    <li>10:00 <span class="reservado">Reservado</span></li>
+                    <li>11:00 <span class="reservado">Reservado</span></li>
+                    <li>12:00 <span class="reservado">Reservado</span></li>
+                    <li>14:00 <span class="disponible">Disponible</span></li>
+                    <li>15:00 <span class="disponible">Disponible</span></li>
+                    <li>16:00 <span class="disponible hora-seleccionada">Disponible</span></li>
+                    <li>17:00 <span class="disponible">Disponible</span></li>
+                    <li>18:00 <span class="disponible">Disponible</span></li>
+                    <li>19:00 <span class="disponible">Disponible</span></li>
+                    <li>20:00 <span class="disponible">Disponible</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Pie del Modal -->
+        <div class="modal-footer">
+            <button class="btn btn-confirmar">Reservar</button>
+            <button class="btn btn-cancelar" onclick="cerrarModal('modalReserva')">Cancelar</button>
+        </div>
+    </div>
+</div>

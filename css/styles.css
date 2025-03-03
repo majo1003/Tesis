@@ -1,0 +1,685 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+
+.hidden {
+    display: none;
+}
+
+
+.dr-h1-login {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    color: #000000;
+}
+
+#login {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#login .login-container {
+    background-color: #f5f5f5;
+    padding: 25px;
+    width: 500px;
+    border-radius: 5px;
+}
+
+#login .login-container .login-form {
+    display: flex;
+    flex-direction: column;
+    border-radius: 5px;
+}
+
+#login .login-form .form-group #contrasena,
+#login .login-form .form-group #correoElectronico {
+    height: 28px;
+    width: 100%;
+    margin: 10px 0px 10px 0px;
+    border: #B3B3B3 solid 1px;
+    border-radius: 8px;
+}
+
+#login .login-form .btn-primary {
+    background: #7866A9;
+    color: #ffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 100%;
+    margin: 10px 0pc 10px 0px;
+}
+
+#login .login-links {
+    display: flex;
+    justify-content: center;
+    margin-top: 25px;
+}
+
+
+#login .login-links .btn-secondary {
+    background: rgba(0, 0, 0, 0.8);
+    border: none;
+    border-radius: 8px;
+    color: #ffff;
+    padding: 10px 20px;
+    cursor: pointer;
+    width: 200px;
+
+}
+
+/* Estilos para pantalla de calendario */
+
+.header-pantalla {
+    background: #000000;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-pantalla .titulo {
+    width: 100%;
+    justify-content: center;
+}
+
+.header-pantalla .titulo h1 {
+    text-shadow: #ffffff 1px 1px 1px;
+    text-align: center;
+    color: #ffffff;
+}
+
+.header-pantalla .cerrar-sesion {
+    display: flex;
+    justify-content: end;
+    padding-right: 10px;
+}
+
+.pantalla-principal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+#menu-lateral {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 17%;
+    background: #000000;
+    height: 100%;
+    overflow: hidden;
+}
+
+#menu-lateral nav {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#menu-lateral nav ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+}
+
+#menu-lateral nav ul li button {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding: 10px 0px 10px 30px;
+    background: #ffff;
+    color: #000000;
+    margin: 10px;
+    border-radius: 24px;
+    width: 180px;
+    max-width: 90%;
+    overflow: hidden;
+    font-size: 16px;
+    gap: 10px;
+    transition: transform 0.3s ease;
+    /* Efecto visual al interactuar */
+}
+
+#menu-lateral nav ul li button:hover {
+    transform: scale(1.05);
+    background-color: #f0f0f0;
+}
+
+
+
+#calendar {
+    width: 83%;
+    height: 100%;
+    border: 1px solid #B3B3B3;
+    padding: 10px;
+    background: #ffff;
+}
+
+/* Estilos apra la seccion de clientes */
+#clientes {
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    width: 83%;
+    height: 100%;
+    border: 1px solid #B3B3B3;
+    padding: 10px 120px 0px 120px;
+    background: #ffff;
+}
+
+.lista-paciente {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #B3B3B3;
+}
+
+.lista-paciente .titulo {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: left;
+}
+
+.dr-h1 {
+    margin: 0px;
+    color: #212121;
+}
+
+.dr-span {
+    color: #B5B5C3;
+}
+
+.dr-spanGris {
+    display: flex;
+    align-items: center;
+    color: #54577A;
+}
+
+.lista-paciente .botones {
+    display: flex;
+    justify-content: end;
+    width: 100%;
+    padding: 0px;
+}
+
+.lista-paciente .botones .dr-button {
+    padding: 5px 10px 5px 10px;
+}
+
+.dr-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #7866A9;
+    color: #ffff;
+    border: none;
+    border-radius: 6px;
+    width: 100px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.dr-buttonHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #2f2c35;
+    color: #ffff;
+    border: none;
+    border-radius: 6px;
+    width: 110px;
+    padding: 5px 10px;
+}
+
+.buscar-paciente {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.buscar-paciente input {
+    width: 600px;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    background: #D6D6D6;
+}
+
+.tabla-pacientes {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tabla-pacientes .tabla {
+    width: 100%;
+    text-align: left;
+}
+
+.tabla-pacientes .tabla thead th {
+    color: #B5B5C3;
+    font-weight: bold;
+}
+
+.tabla-pacientes .tabla tbody tr td {
+    color: #464E5F;
+    font-weight: 600;
+    font-size: 14px;
+    padding-bottom: 10px;
+}
+
+.tabla-pacientes .tabla .estado-celda {
+    width: 15%;
+}
+
+.tabla-pacientes .tabla .estado {
+    display: flex;
+    justify-content: center;
+    background: #09ff00;
+    border-radius: 6px;
+    padding: 5px;
+    width: 100%;
+}
+
+.tabla-pacientes .tabla tbody .nombre {
+    display: flex;
+    flex-direction: column;
+}
+
+.tabla-pacientes .tabla tbody .nivel {
+    font-size: 12px;
+    color: gray;
+}
+
+
+/* Estilos para la secicon de task*/
+
+
+#tasks {
+    display: flex;
+    justify-content: space-between;
+    width: 83%;
+    height: 100%;
+    border: 1px solid #B3B3B3;
+    padding: 10px;
+    background: #ffff;
+    box-sizing: border-box;
+
+}
+
+.detalles-pacientes {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 70%;
+    height: 100%;
+    overflow: auto;
+}
+
+.detalles-pacientes .titulos {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.detalles-pacientes .titulos .estado {
+    display: flex;
+    flex-direction: row;
+}
+
+.container-descripcion {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+}
+
+.container-descripcion .imagen-description {
+    display: flex;
+    align-items: center;
+}
+
+.dr-p {
+    display: flex;
+    align-items: center;
+}
+
+.detalles-pacientes .ubicacion-paciente {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#map {
+    width: 450px;
+    height: 300px;
+}
+
+
+.ingreso-datos {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 30%;
+}
+
+.ingreso-datos .detalles-paciente {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    margin-bottom: 20px;
+}
+
+.ingreso-datos .detalles-paciente p {
+    margin: 0px;
+    padding: 5px;
+}
+
+.ingreso-datos .file-stack {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+    gap: 5px;
+}
+
+.dr-maginbottom20px {
+    margin-bottom: 20px;
+}
+
+.ingreso-datos .file-stack input {
+    width: 100%;
+    padding: 5px;
+    background: #D6D6D6;
+    border: none;
+    border-radius: 6px;
+}
+
+.ingreso-datos .file-stack p {
+    margin: 0px;
+    padding: 5px;
+}
+
+.upload-section {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.upload-area {
+    border: 2px dashed #B3B3B3;
+    border-radius: 10px;
+    padding: 30px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.upload-area:hover {
+    background-color: #f0f8ff;
+}
+
+.upload-area p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.upload-label {
+    display: inline-block;
+    background-color: #54577A;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.upload-label input {
+    display: none;
+}
+
+.dr-button {
+    background-color: #7866A9;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.dr-button:hover {
+    background-color: #464E5F;
+}
+
+.file-name {
+    margin-top: 10px;
+    color: #555;
+    font-style: italic;
+}
+
+/* Estilos para el pie de pagina*/
+
+footer {
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    margin-top: auto;
+}
+
+footer p {
+    margin: 0px;
+}
+
+.dr-gap10 {
+    gap: 10px;
+}
+
+.dr-gap20 {
+    gap: 20px;
+}
+
+/* Estilos para el usuario*/
+
+.cabezera-usuario {
+    background: #7866A9;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cabezera-usuario .titulo {
+    width: 100%;
+    justify-content: center;
+}
+
+.cabezera-usuario .titulo h1 {
+    text-shadow: #2b253d 1px 1px 1px;
+    text-align: center;
+}
+
+.cabezera-usuario .cerrar-sesion {
+    display: flex;
+    justify-content: end;
+    padding-right: 120px;
+}
+
+
+.usuario-principal {
+    background: #7866A9;
+    height: 100%;
+    padding: 0px 100px 0px 100px;
+}
+
+#reservaciones {
+    background: #ffff;
+    padding: 20px 100px 0px 50px;
+    height: 100%;
+}
+
+#reservaciones .titulo-boton h1 {
+    padding: 0px;
+    margin: 0px;
+}
+
+.dr-padding-100px-lados {
+    padding: 50px 100px 0px 100px;
+}
+
+/* Estilos para el registro de usuario*/
+
+#registrar-cuenta {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+}
+
+.container {
+    display: flex;
+    width: 90%;
+    max-width: 1200px;
+    height: 80%;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.left-panel {
+    background-color: #6c4ea0;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+}
+
+.left-panel .icon {
+    width: 60%;
+    height: auto;
+    filter: brightness(100) contrast(100) saturate(1.3) drop-shadow(10px 10px 15px rgba(0, 0, 0, 0.5));
+}
+
+.right-panel {
+    flex: 1;
+    background-color: #fff;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.right-panel h1 {
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #6c4ea0;
+}
+
+.register-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.register-form label {
+    margin-bottom: 5px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.register-form input {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
+.password-input {
+    width: 100%;
+    padding-right: 30px; /* Espacio para el ícono */
+    padding-left: 10px; /* Espacio izquierdo, si es necesario */
+    height: 40px; /* Ajusta el alto si es necesario */
+    box-sizing: border-box; /* Asegura que el padding se incluya en el cálculo del ancho total */
+}
+
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-80%); /* Centra verticalmente la imagen */
+    cursor: pointer;
+}
+
+.toggle-password img {
+    height: 20px; /* Ajusta el tamaño de la imagen */
+    width: auto;
+}
+
+
+
+button {
+    background-color: #6c4ea0;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #573a80;
+}
+
+.login-link {
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #333;
+    text-align: center;
+}
+
+.login-link a {
+    color: #6c4ea0;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}

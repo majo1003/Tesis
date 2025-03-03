@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script type="module" src="script/implementarAPIGoogleMaps.js"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbEJN9YwUlDW1TrU2VokmDJBW5-dWQK5E&callback=initMap&v=weekly"
+        defer></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styles-crud.css">
+    <link rel="stylesheet" href="css/styles-profile.css">
+    <title>Home</title>
+</head>
+
+<body class="hidden">
+
+    <header class="header-pantalla">
+        <div class="titulo">
+            <h1>Bienvenido Administrador</h1>
+        </div>
+
+        <div class="cerrar-sesion">
+            <button class="dr-buttonHeader">Cerrar Sesión</button>
+        </div>
+        
+        <div class="cerrar-sesion">
+            <button onclick="location.href='profilePaciente.html'">Profile</button>
+        </div>
+
+    </header>
+
+
+
+    <main class="pantalla-principal">
+        <header id="menu-lateral">
+            <div class="manu">
+                <nav>
+                    <ul>
+                        <li><button class="nav-link" data-target="calendar" href="#"> <img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAALNJREFUSEvdlUEKgzAQRZ/nEATpot7Gy3TTG7QX6kHcuBMF79FSMBQi099Mq1izCzPz//yfSZKx8MoWxkcR3KcGrDwVX5+gBi5A5bSuBU7ALdTH0kcgd4KHsg44WATB0y85XtbHClYjUNNlKZxNlaVgPwSx5NT97KKlAqh8SZA6rts7ZGWBikuLFICKS4L/P4OfKxiAIhU1yu+B0nqunx/OFTg6SRrg/O7DceLaZd5X8+NGHks5NBnCpFrAAAAAAElFTkSuQmCC" />
+                                Calendario</button>
+                        </li>
+                        <li><button href="#" class="nav-link" data-target="clientes"><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAARlJREFUSEu11c8qxUEUwPHPtfAGFkpKKcXCU3gA5R1sJJEssMFNSSkLGwtr5Q28hA1lx4IsPIHyb+p3pXF/9878zG/WZ77fOXPOzOloeXVa5osFSzjATEPxPXZw1dsfC24x2xDe23aHuTrB5z/hf7hxBoME+zirCCvYHnCYH26qYB0nETAIQr36rWzBGF4j0jieSwkC7KVNwRaOIsEu9kplEDhdnGIUq9gsWeTc7s0uchA84qEyTWGyVAaXuMA1PiroCBawjMU+oqQM3r5bMzyo8yH3s4HjKCZJED6tUNiUFR7h2q/AJMEEnlLomMdNriBnVoSavOcKEg9f5i/KldXWoPWBE0bmIaZzj1zFDx2ZDbn123I6pZH8C+MWNBk3lDwfAAAAAElFTkSuQmCC" />
+                                Clientes</button>
+                        </li>
+                        <li><button href="#" class="nav-link" data-target="tasks"><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAARVJREFUSEvl1TtKBEEQxvHfgpGhkeAbBU08gqIn8ABew8TUSI/hJYzXF8aamPhEAyNjE1EKZmTopXfW3l0TOxu66vt/1VNFdYz5dMasrw1wis0WE11s52JSwA4OsVZY2S32cFLnp4BXzBSK12kPWM4BvqqLGlx/tzHT+B/jaQV/Dmhznt6nBnu6qCfgl4SRAqbwnhgYGSA67QzHOGhAigFNtyF+gUXcYR0fFaQIEA53GxN9iYVKfANvw1QwiWus4BETmMM9thCD2TxFFUzjqnqSEHtCOE/F464IEImzOK+s5sSHAkRy/NRPvPSZjeIKBp23fwB4xvyg75GJiy5byu2D2GhHWC2E3GC/30Yr1M2ntS39oYHfAk1CGRiOJxUAAAAASUVORK5CYII=" />
+                                Tasks</button>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <section id="calendar">
+            <div>
+                <h2>Calendario</h2>
+                <div id="calendario"></div>
+            </div>
+        </section>
+
+        <section id="clientes" class="dr-gap20">
+            <div class="lista-paciente">
+                <div class="titulo">
+                    <h1 class="dr-h1">Lista de pacientes</h1>
+                    <span class="dr-span">45 pacientes encontrados</span>
+                </div>
+                <div class="botones dr-gap10">
+                    <button class="dr-button" onclick="abrirModal('modalAgregar')"><img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAWJJREFUSEvtlEsrRWEUhp83Y5ciuU74AzIzF6UMkYmSgT8gZi4zlF9AmbqMRWRmrPwAmehElBTjl0/fFvs45+y9dSbyTfYerL2ebz1rrS3qfFTn/PxRgO0eYAcYigovgHlJt3mVlimy3QVcAW2pZA/AgKRSHshPgANgIlawAjQA4TkHHEqa/C3gCWgBehMltvuAa+BeUsdvAfdAO9An6SYkqwWw7RAnqcxINUXb7x+tRkVrwCywJ2k6XUFeQCdwCaRVhOYOSgoVfju5AFFJE7AIzMRMu8CmpNckc5K0Uj8SXYU3uTDA9nh03w80xxs+xylalnRUWJHtJWC9xhguSNr6GpOpB7ZHgRPgDgigU0nhPYxpaPgIsBGbPyzpPN2PqmNq+wwYBqYkhW0uO7bDFu8Dx5LGsizcZ5NtJwvWKOmlAqAVeARKkrrzAipuY1bfPwELj2mW23/8PrIGFo37B9Q09wahz44Zok46AwAAAABJRU5ErkJggg==" />
+                        Agregar</button>
+                    <button class="dr-button" onclick="abrirModal('modalEditar')"><img
+                            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAchJREFUSEu1lTtPVUEUhb8VaxOJRo1EGwosrfgBxhcaSyFW/AITgiRYGeiESLSwpwUt1Uh4WdraGQsaDChGo1FLyPLsZCDXwx3mesidds5e336s2Ud0+ajL+nQEsH27SmQS6EsJrQMPJb0uJVgE2J4AHmWExiXNHgY5FGD7OrAIfAECtJTErgHTwFngiqTVHKQEWA4BYFjS81YR20PAAvBG0s2mgB/ACeC4pD81wEngG7AlqbcpYBs4DZyS9D0D2JYUrWp7Si2Knl8FhiS9yLRoUdJgU0DrkMeBmMmxBJ0BzhxpyJGV7TEgxEK49ewCYdOnjW26F2i7H7gPhD13gLVq8LOSPh75oZUESvfZIdsOe0bWA8Cl5KZWva/Ae+BdquZ3O1hbgO1wxVwaYinJuN8CRiSt1D8+ALB9C3iVPnwJTAHrkn7WbBoVxvKL+4iJMygpVsv++Qdgu6daCx9S5tOSHnSSvu3HqZ2fgYuSfu3F1QGjwBPgraTLnYgnK4dOPMrYW/ckPcsBYqHdKT2edmDbN2LxVRXMV/a9mwNsAOeBnnrPS9XYPgdsAp8kXcgBHBeSij+iTBUH4hsJlarJuuh/Ajv9tusV/AXpWpsZNntrxAAAAABJRU5ErkJggg==" />
+                        Editar</button>
+                </div>
+                <div id="modales-container"></div>
+            </div>
+            <div class="buscar-paciente dr-gap20">
+                <label for="buscar">Nombre: </label>
+                <input type="text" name="buscar">
+                <button class="dr-button">Buscar</button>
+            </div>
+            <div class="tabla-pacientes">
+                <table class="tabla">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>ID</th>
+                            <th>Descripción</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="nombre">
+                                    <span>Juan Valladares</span>
+                                    <span class="nivel">Segundo nivel</span>
+                                </div>
+                            </td>
+                            <td>1234</td>
+                            <td>Dolor de huesos</td>
+                            <td class="estado-celda">
+                                <div class="estado">Sin atender</div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="nombre">
+                                    <span>Edison Loja</span>
+                                    <span class="nivel">Quinto nivel</span>
+                                </div>
+                            </td>
+                            <td>3456</td>
+                            <td>Vesicula dañada</td>
+                            <td class="estado-celda">
+                                <div class="estado">Fallo</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="tasks" class="dr-gap10">
+
+            <div class="detalles-pacientes dr-gap20">
+                <div class="titulos dr-gap10">
+                    <h1 class="dr-h1">Dolor de huesos</h1>
+                    <span class="dr-spanGris">Juan Valladares, Segundo Nivel</span>
+                    <div class="estado dr-gap10">
+                        <span class="dr-spanGris"><img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAYVJREFUSEu9ljFLw0AUx/9X4uQguHTTIoqgg5/BwVURHaVcaumig7M4ZBBEFxcdhEAuBDfRwc/gB3BQEApWt4IU55DckyumSEzSu9iaLbl3/9/7v3d5CcOYLzZmfeQCbNveJqJjAIuGSbwwxo48z7tR+3IBnPMnAEuG4kn4sxBieRiAcsR7AO6+1zYBTGfFCSH6yRc5yAJ0LctacV23qzY3m81qFEWPAKppSFnApRBi/6cY5/wCwN6oALdCiK1SAM55vySJteQ+lVkYx/FCEATv6rnjOFan02kDmB3qQBOgdCSAewAfANYAzGg12QCgdXJ/NVkDoEp4FcfxWRAEr4rSaDTmpJSHAHb/WqIeEa37vv+QlX69Xl+tVCqqbJPJupEDItrxff+6qDac8wMA56UAtVptwnGcqAjQarWmwjD8LAXQ6moqSKdEox126VOkxrWU8oQxNm/oIHtcpwGGornhg2n6H4C3vNe+yE3SzLyYgQPbtjeI6NT0E6kNGFXN0zpj/6v4Apsu0RkEP99NAAAAAElFTkSuQmCC" />
+                            Sin atender</span>
+                        <span class="dr-spanGris"><img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAzRJREFUSEvFlU9oVFcUxr9zkxmVMYG6i4oZ2kULlVQCEQTRrkq1iLR1GiHxvTvJIBIc4kJcqNhX1JVIqamCMXnvXFsocSHBtikKLsTanbS2KCH+SSIu3BSUgVTJzBznwpuQ+fOGWBAvvMV777v3d8653z2X8IYHveH10RCQzWaX5XK5LwF8CuAjAEkAAmAGwF9E9FssFrs8PDw8HxVoJMBxnG1KqXPhopGJisgDAPuMMdfrieoCtNZeKdKvwwmPAYwR0a8icif8tgHADhH5iojW2m8ictAYc7oaUgNYtHiuFF2vMebnsCw1AXqep2ZnZ1MiEgBYISKDxpgzi4UVAK31DgBXAPwnIl3GmLtLMYHjOBuJ6BYRKaXUVt/3fy/PWwAMDAysnJubmwLQRkR7giD4sXpxrbXdYDBzvcwPAPgWwGQ8Hu8ob/yCUGs9AOAsgHvMvL5eWRoBUqlUPJFIWHe1AficmcdtMAuAdDo9ISLbRGS/McaCakYjgBVrrU8COAzgAjPvrQBorZ+UfqxRSr3n+/6j/wPo6+vbXCwWbxLRn0EQdFYD5qwT7MPMLxoBmpqakqOjo7PVmv7+/lWFQuFfAM+Y+Z0KgOu6OSJaqZRq9X0/FwGYDg/edHNz85aRkRGb9cLo6elpjcVizwHkmLm1OoNJAO8D6GDmf+oBHMexJbwFoD1sF5uY+WlZm06nO0XkdmiUD6sBP5UsthvAIWY+FeX/TCazNp/P3wDwrohkjDGjiwBHReQ4gB+Y2akG7ClNugjgfjKZ/MDzvGIUJMxkV6nO35U1nuc1z8zMPASwTkS6jTGXKgCpVGpFIpGwZVoHIM3MvJRTXNZorbMAbJuYamlp6RgaGnpZAbAvrut+QkRXX7dVaK27ROQP2yoAfMzMN8vgmiPvuu4RIjoB4DkR9QZB8EtUJmGz6xaRCwASRJQNguD7xfq67dp13WNE9E0otNYcAzARj8f/np+fjxcKhfVKqZ0AUgBWh21lkJmHqoOJvHBc1/2MiM7b091oL+yFo5TKBEFgnVUzGl6ZWuvlAL4AsN2ej9D/tqNat9wmomvt7e3jnuflo4J4u5f+69g0SvsKBtJEKC5JECkAAAAASUVORK5CYII=" />
+                            1 hour</span>
+                    </div>
+                </div>
+                <div class="container-descripcion">
+                    <div class="imagen-description dr-gap20">
+                        <div class="imagen">
+                            <img src="images/pacienteJustin.png" alt="imagen del paciente" height="150px" width="150px">
+                        </div>
+                        <div class="descripcion">
+                            <div class="descripcion">
+                                <h2>Descripción</h2>
+                                <p>Follow the video tutorial above. Understand how to use each tool
+                                    in the Figma application. Also learn how to make a good and correct design.
+                                    Starting from spacing, typography, content, and many other design hierarchies.
+                                    Then try to make it yourself with your imagination and inspiration.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="problemas">
+                        <h2 class="dr-h1">Problemas</h2>
+                        <p class="dr-p dr-gap10"><img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAA61JREFUSEvFlV1oHFUUx/9ndje7sTXQgkjaUj/64EdLlEJ9Mq2+iK2UoiEzSWilxexsqC41INkkLXZEm51pkYKpkb0bbNWiOwOW4keKgkj65VPxCyXUtBYVq4LVENtu3N179CbZuLvdWeND8bzNnf/9/86ce+ZcwnUOus7+qAmIx0fCN0z90UKQDwPaPQDfCoABXADwGYiOXeLfjggRy/kl6gtIRDPriWgIgDKtFeMaya6BVPtH1URVAb2ma/2d6e7ZDd8B7BJr74dzoc/VWjaSvZcLtJGIdADLZnXP2MJ4sRJyDaDEfJKYNifTre8CpMpyTViWpWUv3t0K5oMA6gnYkRTGS6XCMkAi5m4kxjsArjIX1jjpjq/m0wQ9Xd59muRTADQGrXOEfrK4bw5gbfcWZvN8FkAjE7Y4KePwfMyLmj4z8zSD9gM8dgkTTcWDnwP0RjPbQfQygK9toa/yK0vRsL/zzZulFuiwhbFfrVmtXl12EavuaiTg0aQwjqr1fwCmNwLwegaecoShQL6xs8tbKiWPMrACRDE7pQsl7jPdPQz0MyHtpAyzAuD+AGApAsEV9ist5/3clXlBylMA3QJgvBCk5n1D+k9KnzC9+wl8AqBPbaGvrgRcUZ0Q+fNKvXVoW3Y2ox6ShdcGhjt+Vs+z5scBul2ZawiuHRAtF4vJdD/hLQ4H+FcGfneEsagSMAlgocxHGva+umkyYbpPEnCAgW+DGjXn8gHStNxJlblaYxlcu3e4RX31XOyOH26YmgpNAJi0hdFQCRgDcAeDmhyhf9nT+fYyTcuNqmyVIQGhmZ+Kz0sZWldprsz6zcxqCToz0yjGyjJAn+m+xUAbQD220PeplzOQ/ImScXFBymBzNfPpM4i5u4jxPMBv2KLt8XJA1NvCxK8D/E1kydidlmXJEsgnAPK1zC3r42D2x1/OAVjODMNJG14ZoLvbqw9fZlWm5WDaZqf1Q8Xi7ur0buO6Qn7PUPv3ft2ViGXixKTGxNnL4RubBgc3TJUB1EOvmXkIoA/+66jojWbWgOi0GhUk5QPJ4XZV1umoMuy8nQC/AGCCmDcn023v+WU9M+zuMsBIA1gAUNwW+oFSfdVxnYh6zxLxc0qoOkgDu5A8IrXAF1oOdRTiVZJ4E5haASxRMibe4aTaBiuT8b9wTO8RAqem/+7aMU5Mncm0PlpNVvPKtLYejFytW/AYEW8AowmAGg/MwDkQzmigD8ONNx21rAfzfjn8v5f+v5RmXq//Amd8hSibMh3lAAAAAElFTkSuQmCC" />
+                            Understanding the tools in Figma</p>
+                        <p class="dr-p dr-gap10"><img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAA61JREFUSEvFlV1oHFUUx/9ndje7sTXQgkjaUj/64EdLlEJ9Mq2+iK2UoiEzSWilxexsqC41INkkLXZEm51pkYKpkb0bbNWiOwOW4keKgkj65VPxCyXUtBYVq4LVENtu3N179CbZuLvdWeND8bzNnf/9/86ce+ZcwnUOus7+qAmIx0fCN0z90UKQDwPaPQDfCoABXADwGYiOXeLfjggRy/kl6gtIRDPriWgIgDKtFeMaya6BVPtH1URVAb2ma/2d6e7ZDd8B7BJr74dzoc/VWjaSvZcLtJGIdADLZnXP2MJ4sRJyDaDEfJKYNifTre8CpMpyTViWpWUv3t0K5oMA6gnYkRTGS6XCMkAi5m4kxjsArjIX1jjpjq/m0wQ9Xd59muRTADQGrXOEfrK4bw5gbfcWZvN8FkAjE7Y4KePwfMyLmj4z8zSD9gM8dgkTTcWDnwP0RjPbQfQygK9toa/yK0vRsL/zzZulFuiwhbFfrVmtXl12EavuaiTg0aQwjqr1fwCmNwLwegaecoShQL6xs8tbKiWPMrACRDE7pQsl7jPdPQz0MyHtpAyzAuD+AGApAsEV9ist5/3clXlBylMA3QJgvBCk5n1D+k9KnzC9+wl8AqBPbaGvrgRcUZ0Q+fNKvXVoW3Y2ox6ShdcGhjt+Vs+z5scBul2ZawiuHRAtF4vJdD/hLQ4H+FcGfneEsagSMAlgocxHGva+umkyYbpPEnCAgW+DGjXn8gHStNxJlblaYxlcu3e4RX31XOyOH26YmgpNAJi0hdFQCRgDcAeDmhyhf9nT+fYyTcuNqmyVIQGhmZ+Kz0sZWldprsz6zcxqCToz0yjGyjJAn+m+xUAbQD220PeplzOQ/ImScXFBymBzNfPpM4i5u4jxPMBv2KLt8XJA1NvCxK8D/E1kydidlmXJEsgnAPK1zC3r42D2x1/OAVjODMNJG14ZoLvbqw9fZlWm5WDaZqf1Q8Xi7ur0buO6Qn7PUPv3ft2ViGXixKTGxNnL4RubBgc3TJUB1EOvmXkIoA/+66jojWbWgOi0GhUk5QPJ4XZV1umoMuy8nQC/AGCCmDcn023v+WU9M+zuMsBIA1gAUNwW+oFSfdVxnYh6zxLxc0qoOkgDu5A8IrXAF1oOdRTiVZJ4E5haASxRMibe4aTaBiuT8b9wTO8RAqem/+7aMU5Mncm0PlpNVvPKtLYejFytW/AYEW8AowmAGg/MwDkQzmigD8ONNx21rAfzfjn8v5f+v5RmXq//Amd8hSibMh3lAAAAAElFTkSuQmCC" />
+                            Understanding the tools in Figma</p>
+                        <p class="dr-p dr-gap10"><img
+                                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAA61JREFUSEvFlV1oHFUUx/9ndje7sTXQgkjaUj/64EdLlEJ9Mq2+iK2UoiEzSWilxexsqC41INkkLXZEm51pkYKpkb0bbNWiOwOW4keKgkj65VPxCyXUtBYVq4LVENtu3N179CbZuLvdWeND8bzNnf/9/86ce+ZcwnUOus7+qAmIx0fCN0z90UKQDwPaPQDfCoABXADwGYiOXeLfjggRy/kl6gtIRDPriWgIgDKtFeMaya6BVPtH1URVAb2ma/2d6e7ZDd8B7BJr74dzoc/VWjaSvZcLtJGIdADLZnXP2MJ4sRJyDaDEfJKYNifTre8CpMpyTViWpWUv3t0K5oMA6gnYkRTGS6XCMkAi5m4kxjsArjIX1jjpjq/m0wQ9Xd59muRTADQGrXOEfrK4bw5gbfcWZvN8FkAjE7Y4KePwfMyLmj4z8zSD9gM8dgkTTcWDnwP0RjPbQfQygK9toa/yK0vRsL/zzZulFuiwhbFfrVmtXl12EavuaiTg0aQwjqr1fwCmNwLwegaecoShQL6xs8tbKiWPMrACRDE7pQsl7jPdPQz0MyHtpAyzAuD+AGApAsEV9ist5/3clXlBylMA3QJgvBCk5n1D+k9KnzC9+wl8AqBPbaGvrgRcUZ0Q+fNKvXVoW3Y2ox6ShdcGhjt+Vs+z5scBul2ZawiuHRAtF4vJdD/hLQ4H+FcGfneEsagSMAlgocxHGva+umkyYbpPEnCAgW+DGjXn8gHStNxJlblaYxlcu3e4RX31XOyOH26YmgpNAJi0hdFQCRgDcAeDmhyhf9nT+fYyTcuNqmyVIQGhmZ+Kz0sZWldprsz6zcxqCToz0yjGyjJAn+m+xUAbQD220PeplzOQ/ImScXFBymBzNfPpM4i5u4jxPMBv2KLt8XJA1NvCxK8D/E1kydidlmXJEsgnAPK1zC3r42D2x1/OAVjODMNJG14ZoLvbqw9fZlWm5WDaZqf1Q8Xi7ur0buO6Qn7PUPv3ft2ViGXixKTGxNnL4RubBgc3TJUB1EOvmXkIoA/+66jojWbWgOi0GhUk5QPJ4XZV1umoMuy8nQC/AGCCmDcn023v+WU9M+zuMsBIA1gAUNwW+oFSfdVxnYh6zxLxc0qoOkgDu5A8IrXAF1oOdRTiVZJ4E5haASxRMibe4aTaBiuT8b9wTO8RAqem/+7aMU5Mncm0PlpNVvPKtLYejFytW/AYEW8AowmAGg/MwDkQzmigD8ONNx21rAfzfjn8v5f+v5RmXq//Amd8hSibMh3lAAAAAElFTkSuQmCC" />
+                            Understanding the tools in Figma</p>
+                    </div>
+                </div>
+                <div class="ubicacion-paciente">
+                    <h1>Localización del paciente</h1>
+                    <div id="map"></div>
+                </div>
+
+            </div>
+            <div class="ingreso-datos">
+                <div class="detalles-paciente">
+                    <h2 class="dr-h1">Detalles del paciente</h2>
+                    <p>Nombre :</p>
+                    <p>Edad: </p>
+                    <p>Ubicación: </p>
+                </div>
+
+                <div class="file-stack">
+                    <h2 class="dr-h1">Datos</h2>
+                    <p>Ultima modificación: 2024 Julio 14</p>
+                    <p>Documento: </p>
+                    <div class="upload-area" id="uploadArea">
+                        <p>Arrastra y suelta tu archivo aquí o</p>
+                        <label for="fileInput" class="upload-label">
+                            Seleccionar archivo
+                            <input type="file" id="fileInput" name="Documento" class="file-input" />
+                        </label>
+                    </div>
+                    <button id="submitButton" class="dr-button">Enviar</button>
+                    <p id="fileName" class="file-name"></p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Maria Jose Encalada. Todos los derechos reservados.</p>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: 'https://fullcalendar.io/api/demo-feeds/events.json'
+            });
+            calendar.render();
+        });
+    </script>
+
+    <script src="script/secciones.js"></script>
+    <script src="script/ingresarDocumento.js"></script>
+    <script src="script/cierre-sesion.js"></script>
+
+
+    <script>
+        // Función para cargar el contenido de los modales
+        async function cargarModales() {
+            const response = await fetch('crudClientes.html');
+            const modalesHTML = await response.text();
+            document.getElementById('modales-container').innerHTML = modalesHTML;
+        }
+
+        // Cargar los modales al iniciar la página
+        document.addEventListener('DOMContentLoaded', cargarModales);
+
+        // Funciones para abrir y cerrar modales
+        function abrirModal(idModal) {
+            const modal = document.getElementById(idModal);
+            modal.style.display = "flex"; // Cambia display a flex
+        }
+
+        // Función para cerrar el modal
+        function cerrarModal(idModal) {
+            const modal = document.getElementById(idModal);
+            modal.style.display = "none"; // Oculta el modal
+        }
+
+        // Cerrar el modal al hacer clic fuera de él
+        window.onclick = function (event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            }
+        }
+    </script>
+
+</body>
+
+</html>
