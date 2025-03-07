@@ -12,8 +12,8 @@ $fecha = $_POST['fecha'];
 // Consulta para obtener las franjas horarias y verificar su disponibilidad
 $sql = "SELECT H.id_hora, H.hora_inicio, H.hora_fin, 
                IFNULL(HD.estado, 1) AS estado
-        FROM Horas H
-        LEFT JOIN HorarioDisponibilidad HD 
+        FROM horas H
+        LEFT JOIN horariodisponibilidad HD 
         ON H.id_hora = HD.id_hora 
         AND HD.id_doctor = ? 
         AND HD.fecha = ?";

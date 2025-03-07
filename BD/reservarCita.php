@@ -35,7 +35,7 @@ $id_paciente = $_SESSION['id_paciente'];
 
 // Insertar la cita
 $stmt = $pdo->prepare('
-    INSERT INTO Cita (fecha_hora, descripcion, id_paciente, id_doctor, id_horario)
+    INSERT INTO cita (fecha_hora, descripcion, id_paciente, id_doctor, id_horario)
     VALUES (NOW(), :descripcion, :id_paciente, :id_doctor, :horaSeleccionada)
 ');
 $stmt->execute(['descripcion' => $descripcion, 'id_paciente' => $id_paciente, 'id_doctor' => 1, 'horaSeleccionada' => $horaSeleccionada]);

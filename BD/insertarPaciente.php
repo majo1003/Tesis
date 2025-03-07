@@ -13,7 +13,7 @@ $id_horario = $_POST['hora'];
 $tipo_enfermedad = $_POST['tipo_enfermedad'];
 $descripcion = $_POST['descripcion']; // Capturar la descripción
 
-$query = "INSERT INTO Cita (fecha_hora, descripcion, atendida, id_paciente, id_doctor, id_horario, tipo_enfermedad) 
+$query = "INSERT INTO cita (fecha_hora, descripcion, atendida, id_paciente, id_doctor, id_horario, tipo_enfermedad) 
           VALUES (?, ?, 0, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($query);

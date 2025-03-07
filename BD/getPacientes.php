@@ -34,10 +34,10 @@ $sql = "SELECT
             p.edad,
             p.ubicacion,
             p.foto
-        FROM Cita c
-        JOIN Paciente p ON c.id_paciente = p.id_paciente
-        LEFT JOIN HorarioDisponibilidad hd ON c.id_horario = hd.id_horario
-        LEFT JOIN Horas h ON hd.id_hora = h.id_hora
+        FROM cita c
+        JOIN paciente p ON c.id_paciente = p.id_paciente
+        LEFT JOIN horariodisponibilidad hd ON c.id_horario = hd.id_horario
+        LEFT JOIN horas h ON hd.id_hora = h.id_hora
         WHERE p.id_paciente = ? AND c.id_cita = ?
         ORDER BY c.fecha_hora DESC
         LIMIT 1";  // Tomamos solo la cita correspondiente

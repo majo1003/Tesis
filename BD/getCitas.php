@@ -23,10 +23,10 @@ if (isset($_SESSION['id_doctor'])) {
 
 // Consulta para obtener las citas, incluyendo el estado, id_paciente e id_cita
 $sql = "SELECT c.id_cita, c.id_paciente, c.descripcion, c.fecha_hora, p.nombre AS paciente, h.hora_inicio, h.hora_fin, c.atendida
-        FROM Cita c
-        JOIN Paciente p ON c.id_paciente = p.id_paciente
-        JOIN HorarioDisponibilidad hd ON c.id_horario = hd.id_horario
-        JOIN Horas h ON hd.id_hora = h.id_hora
+        FROM cita c
+        JOIN paciente p ON c.id_paciente = p.id_paciente
+        JOIN horariodisponibilidad hd ON c.id_horario = hd.id_horario
+        JOIN horas h ON hd.id_hora = h.id_hora
         WHERE c.id_doctor = ?";
 
 if ($stmt = $conn->prepare($sql)) {

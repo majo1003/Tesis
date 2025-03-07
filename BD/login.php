@@ -16,7 +16,7 @@ if (empty($correo) || empty($contrasena)) {
 }
 
 // Intentar verificar si es paciente
-$sql_paciente = "SELECT * FROM Paciente WHERE correo = ? LIMIT 1";
+$sql_paciente = "SELECT * FROM paciente WHERE correo = ? LIMIT 1";
 $stmt_paciente = $conn->prepare($sql_paciente);
 $stmt_paciente->bind_param('s', $correo);
 $stmt_paciente->execute();
@@ -38,7 +38,7 @@ if ($paciente) {
 }
 
 // Intentar verificar si es doctor
-$sql_doctor = "SELECT * FROM Doctor WHERE correo = ? LIMIT 1";
+$sql_doctor = "SELECT * FROM doctor WHERE correo = ? LIMIT 1";
 $stmt_doctor = $conn->prepare($sql_doctor);
 $stmt_doctor->bind_param('s', $correo);
 $stmt_doctor->execute();

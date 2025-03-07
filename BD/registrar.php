@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Consulta SQL para insertar el paciente
-    $sql = "INSERT INTO Paciente (nombre, apellido, correo, contraseña) 
+    $sql = "INSERT INTO paciente (nombre, apellido, correo, contraseña) 
             VALUES ('$nombre', '$apellido', '$correo', '$hashedPassword')";
 
     // Ejecutar la consulta

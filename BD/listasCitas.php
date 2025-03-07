@@ -9,8 +9,8 @@ if (!isset($_SESSION['id_paciente'])) {
 
 $id_paciente = $_SESSION['id_paciente'];
 $query = "SELECT c.fecha_hora, d.nombre AS doctor, c.tipo_enfermedad, c.descripcion 
-          FROM Cita c 
-          JOIN Doctor d ON c.id_doctor = d.id_doctor 
+          FROM cita c 
+          JOIN doctor d ON c.id_doctor = d.id_doctor 
           WHERE c.id_paciente = ?";
 $stmt = $conn->prepare($query);
 $stmt->bind_param("i", $id_paciente);

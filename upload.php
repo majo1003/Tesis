@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['file']) && isset($_P
     }
 
     // Insertar el archivo en la base de datos como un LONGBLOB
-    $stmt = $conn->prepare("INSERT INTO Archivo (id_cita, ruta, tipo) VALUES (?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO archivo (id_cita, ruta, tipo) VALUES (?, ?, ?)");
     $stmt->bind_param("iss", $id_cita, $fileContent, $fileType);  // Guardar el contenido del archivo en la base de datos
 
     if ($stmt->execute()) {

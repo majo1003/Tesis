@@ -35,8 +35,8 @@ try {
 // Consultar las horas disponibles
 $stmt = $pdo->prepare('
     SELECT h.id_hora, h.hora_inicio, h.hora_fin, hd.estado
-    FROM Horas h
-    JOIN HorarioDisponibilidad hd ON h.id_hora = hd.id_hora
+    FROM horas h
+    JOIN horariodisponibilidad hd ON h.id_hora = hd.id_hora
     WHERE hd.id_doctor = :id_doctor AND hd.fecha = :fecha
 ');
 $stmt->execute(['id_doctor' => $id_doctor, 'fecha' => $fecha]);

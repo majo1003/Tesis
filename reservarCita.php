@@ -2,7 +2,7 @@
 include 'BD/conexion.php'; // Conectar a la base de datos
 
 // Obtener los doctores disponibles
-$sqlDoctores = "SELECT id_doctor, CONCAT(nombre, ' ', apellido) AS nombre_completo FROM Doctor";
+$sqlDoctores = "SELECT id_doctor, CONCAT(nombre, ' ', apellido) AS nombre_completo FROM doctor";
 $resultDoctores = $conn->query($sqlDoctores);
 
 // Obtener las horas disponibles (se cargarán dinámicamente según el doctor y fecha)

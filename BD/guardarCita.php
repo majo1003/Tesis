@@ -15,7 +15,7 @@ $tipo_enfermedad = $_POST['tipo_enfermedad'];
 $descripcion = $_POST['descripcion'];
 
 // Verificar que la hora seleccionada existe en la tabla Horas
-$queryHora = "SELECT id_hora FROM Horas WHERE id_hora = ?";
+$queryHora = "SELECT id_hora FROM horas WHERE id_hora = ?";
 $stmtHora = $conn->prepare($queryHora);
 $stmtHora->bind_param("i", $hora);  // Usar la variable hora
 $stmtHora->execute();
@@ -29,7 +29,7 @@ if ($resultadoHora->num_rows == 0) {
 
 // Verificar disponibilidad del doctor para la fecha y hora seleccionada
 $queryDisponibilidad = "SELECT id_horario 
-                        FROM HorarioDisponibilidad 
+                        FROM horariodisponibilidad 
                         WHERE id_doctor = ? AND fecha = ? AND id_hora = ? AND estado = 1";
 $stmtDisponibilidad = $conn->prepare($queryDisponibilidad);
 $stmtDisponibilidad->bind_param("isi", $doctor, $fecha, $hora);  // Se vinculan los parámetros dinámicos
@@ -51,7 +51,7 @@ $id_horario = $row['id_horario'];
 $fecha_hora = $fecha . ' ' . $hora . ':00:00';
 
 // Aquí puedes realizar la inserción de la cita, por ejemplo:
-$queryCita = "INSERT INTO Cita (fecha_hora, id_doctor, id_horario, id_paciente, tipo_enfermedad, descripcion) 
+$queryCita = "INSERT INTO cita (fecha_hora, id_doctor, id_horario, id_paciente, tipo_enfermedad, descripcion) 
               VALUES (?, ?, ?, ?, ?, ?)";
 $stmtCita = $conn->prepare($queryCita);
 $stmtCita->bind_param("sisiss", $fecha_hora, $doctor, $id_horario, $paciente, $tipo_enfermedad, $descripcion);
