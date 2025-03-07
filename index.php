@@ -1,10 +1,25 @@
+<?php
+session_start();
+
+// Si el usuario ya está logueado, redirigirlo a la página principal según su rol
+if (isset($_SESSION['user']) && isset($_SESSION['role'])) {
+    if ($_SESSION['role'] == 'paciente') {
+        header("Location: paginaPrincipalPaciente.php");
+        exit;
+    } elseif ($_SESSION['role'] == 'doctor') {
+        header("Location: paginaPrincipalAdmin.php");
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="css/styles.css">
     <title>Gestor Pacientes</title>
 </head>
 
@@ -15,11 +30,10 @@
     <main>
         <section id="login">
             <div class="login-container">
-                <form action="paginaPrincipalAdmin.html" method="POST" class="login-form">
+                <form action="BD/login.php" method="POST" class="login-form">
                     <div class="form-group">
                         <label for="correoElectronico">Correo Electrónico:</label>
-                        <input type="email" name="correo" id="correoElectronico" placeholder="example@example.com"
-                            required>
+                        <input type="email" name="correo" id="correoElectronico" placeholder="example@example.com" required>
                     </div>
                     <div class="form-group">
                         <label for="contrasena">Contraseña:</label>
@@ -31,15 +45,14 @@
                     </div>
                     <button type="submit" class="btn-primary">Iniciar Sesión</button>
                 </form>
-                <div class="login-links dr-gap10" >
+                <div class="login-links dr-gap10">
                     <button type="button" class="btn-secondary">¿Olvidaste tu contraseña?</button>
-                    <button type="button" class="btn-secondary" onclick="window.location.href='registrarAhora.html'">Regístrate ahora</button>
+                    <button type="button" class="btn-secondary" onclick="window.location.href='registrarAhora.php'">Regístrate ahora</button>
                 </div>
             </div>
         </section>
     </main>
 
-    <script src="script/autentificador.js"></script>
-
 </body>
+
 </html>

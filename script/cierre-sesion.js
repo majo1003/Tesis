@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
         logoutButton.addEventListener("click", function () {
             console.log("Cierre de sesión activado"); // Para depuración
             localStorage.removeItem("loggedInUser");
-            window.location.href = "index.html";
+            window.location.href = "index.php";
         });
     }
 
@@ -13,9 +13,9 @@ document.addEventListener("DOMContentLoaded", function () {
     const currentPage = window.location.pathname;
 
     // Verificar autenticación según la página actual
-    if (currentPage.includes("paginaPrincipalAdmin.html")) {
+    if (currentPage.includes("paginaPrincipalAdmin.php")) {
         checkAuthentication("admin"); // Solo permite acceso a administradores
-    } else if (currentPage.includes("paginaPrincipalPaciente.html")) {
+    } else if (currentPage.includes("paginaPrincipalPaciente.php")) {
         checkAuthentication("user"); // Solo permite acceso a usuarios
     }
 });
@@ -26,7 +26,7 @@ function checkAuthentication(role) {
 
     if (!loggedInUser || loggedInUser.role !== role) {
         // Redirigir al index si no está autenticado o si el rol no coincide
-        window.location.href = "index.html";
+        window.location.href = "index.php";
     } else {
         // Si está autenticado, mostrar el contenido de la página
         document.body.classList.remove("hidden");
