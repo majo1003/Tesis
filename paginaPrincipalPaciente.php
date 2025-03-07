@@ -15,10 +15,10 @@ $id_paciente = $_SESSION['id_paciente'];
 
 // Consultar las citas del paciente
 $query = "SELECT c.descripcion, c.fecha_hora, d.nombre AS doctor, h.hora_inicio, h.hora_fin
-          FROM Cita c
-          JOIN Doctor d ON c.id_doctor = d.id_doctor
-          JOIN HorarioDisponibilidad hd ON c.id_horario = hd.id_horario
-          JOIN Horas h ON hd.id_hora = h.id_hora
+          FROM cita c
+          JOIN doctor d ON c.id_doctor = d.id_doctor
+          JOIN horariodisponibilidad hd ON c.id_horario = hd.id_horario
+          JOIN horas h ON hd.id_hora = h.id_hora
           WHERE c.id_paciente = ?";
 
 $stmt = $conn->prepare($query);
@@ -27,7 +27,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Obtener los doctores disponibles
-$sqlDoctores = "SELECT id_doctor, CONCAT(nombre, ' ', apellido) AS nombre_completo FROM Doctor";
+$sqlDoctores = "SELECT id_doctor, CONCAT(nombre, ' ', apellido) AS nombre_completo FROM doctor";
 $resultDoctores = $conn->query($sqlDoctores);
 ?>
 

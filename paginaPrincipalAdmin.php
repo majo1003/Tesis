@@ -83,7 +83,7 @@ $id_doctor = $_SESSION['id_doctor'];
             <div class="lista-paciente">
                 <div class="titulo">
                     <h1 class="dr-h1">Lista de pacientes</h1>
-                    <span class="dr-span">45 pacientes encontrados</span>
+                    <span id="totalPaciente" class="dr-span"></span>
                 </div>
                 <div id="modales-container"></div>
             </div>
@@ -120,11 +120,8 @@ $id_doctor = $_SESSION['id_doctor'];
         <div class="estado dr-gap10">
             <span id="paciente-status" class="dr-spanGris">
                 <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAYVJREFUSEu9ljFLw0AUx/9X4uQguHTTIoqgg5/BwVURHaVcaumig7M4ZBBEFxcdhEAuBDfRwc/gB3BQEApWt4IU55DckyumSEzSu9iaLbl3/9/7v3d5CcOYLzZmfeQCbNveJqJjAIuGSbwwxo48z7tR+3IBnPMnAEuG4kn4sxBieRiAcsR7AO6+1zYBTGfFCSH6yRc5yAJ0LctacV23qzY3m81qFEWPAKppSFnApRBi/6cY5/wCwN6oALdCiK1SAM55vySJteQ+lVkYx/FCEATv6rnjOFan02kDmB3qQBOgdCSAewAfANYAzGg12QCgdXJ/NVkDoEp4FcfxWRAEr4rSaDTmpJSHAHb/WqIeEa37vv+QlX69Xl+tVCqqbJPJupEDItrxff+6qDac8wMA56UAtVptwnGcqAjQarWmwjD8LAXQ6moqSKdEox126VOkxrWU8oQxNm/oIHtcpwGGornhg2n6H4C3vNe+yE3SzLyYgQPbtjeI6NT0E6kNGFXN0zpj/6v4Apsu0RkEP99NAAAAAElFTkSuQmCC" />
-                Sin atender
             </span>
             <span id="paciente-time" class="dr-spanGris">
-                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAAXNSR0IArs4c6QAAAzRJREFUSEvFlU9oVFcUxr9zkxmVMYG6i4oZ2kULlVQCEQTRrkq1iLR1GiHxvTvJIBIc4kJcqNhX1JVIqamCMXnvXFsocSHBtikKLsTanbS2KCH+SSIu3BSUgVTJzBznwpuQ+fOGWBAvvMV777v3d8653z2X8IYHveH10RCQzWaX5XK5LwF8CuAjAEkAAmAGwF9E9FssFrs8PDw8HxVoJMBxnG1KqXPhopGJisgDAPuMMdfrieoCtNZeKdKvwwmPAYwR0a8icif8tgHADhH5iojW2m8ictAYc7oaUgNYtHiuFF2vMebnsCw1AXqep2ZnZ1MiEgBYISKDxpgzi4UVAK31DgBXAPwnIl3GmLtLMYHjOBuJ6BYRKaXUVt/3fy/PWwAMDAysnJubmwLQRkR7giD4sXpxrbXdYDBzvcwPAPgWwGQ8Hu8ob/yCUGs9AOAsgHvMvL5eWRoBUqlUPJFIWHe1AficmcdtMAuAdDo9ISLbRGS/McaCakYjgBVrrU8COAzgAjPvrQBorZ+UfqxRSr3n+/6j/wPo6+vbXCwWbxLRn0EQdFYD5qwT7MPMLxoBmpqakqOjo7PVmv7+/lWFQuFfAM+Y+Z0KgOu6OSJaqZRq9X0/FwGYDg/edHNz85aRkRGb9cLo6elpjcVizwHkmLm1OoNJAO8D6GDmf+oBHMexJbwFoD1sF5uY+WlZm06nO0XkdmiUD6sBP5UsthvAIWY+FeX/TCazNp/P3wDwrohkjDGjiwBHReQ4gB+Y2akG7ClNugjgfjKZ/MDzvGIUJMxkV6nO35U1nuc1z8zMPASwTkS6jTGXKgCpVGpFIpGwZVoHIM3MvJRTXNZorbMAbJuYamlp6RgaGnpZAbAvrut+QkRXX7dVaK27ROQP2yoAfMzMN8vgmiPvuu4RIjoB4DkR9QZB8EtUJmGz6xaRCwASRJQNguD7xfq67dp13WNE9E0otNYcAzARj8f/np+fjxcKhfVKqZ0AUgBWh21lkJmHqoOJvHBc1/2MiM7b091oL+yFo5TKBEFgnVUzGl6ZWuvlAL4AsN2ej9D/tqNat9wmomvt7e3jnuflo4J4u5f+69g0SvsKBtJEKC5JECkAAAAASUVORK5CYII=" />
-                1 hora
             </span>
         </div>
     </div>
