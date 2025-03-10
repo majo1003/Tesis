@@ -117,13 +117,14 @@ body {
     justify-content: space-between;
     align-items: center;
     height: 100%;
+    padding: 0px;
 }
 
 #menu-lateral {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 17%;
+    width: 15%;
     background: #000000;
     height: 100%;
     overflow: hidden;
@@ -167,10 +168,14 @@ body {
     background-color: #f0f0f0;
 }
 
-
+#uploadForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
 #calendar {
-    width: 83%;
+    width: 85%;
     height: 100%;
     border: 1px solid #B3B3B3;
     padding: 10px;
@@ -182,7 +187,7 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: top;
-    width: 83%;
+    width: 85%;
     height: 100%;
     border: 1px solid #B3B3B3;
     padding: 10px 120px 0px 120px;
@@ -247,13 +252,17 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
     background: #2f2c35;
     color: #ffff;
     border: none;
     border-radius: 6px;
     width: 110px;
     padding: 5px 10px;
+    text-decoration: none; /* Elimina el subrayado */
+
 }
+
 
 .buscar-paciente {
     display: flex;
@@ -274,23 +283,32 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 20px;
 }
 
 .tabla-pacientes .tabla {
     width: 100%;
     text-align: left;
+    border-collapse: collapse; /* Asegura que los bordes se unan */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil alrededor de la tabla */
+    border-radius: 8px; /* Bordes redondeados para la tabla */
+    overflow: hidden; /* Oculta los bordes redondeados en las celdas */
 }
 
 .tabla-pacientes .tabla thead th {
     color: #B5B5C3;
     font-weight: bold;
+    padding: 12px;
+    background-color: #f4f6f9; /* Color de fondo claro para el encabezado */
+    border-bottom: 2px solid #ddd; /* Línea de separación debajo del encabezado */
 }
 
 .tabla-pacientes .tabla tbody tr td {
     color: #464E5F;
     font-weight: 600;
     font-size: 14px;
-    padding-bottom: 10px;
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Línea de separación entre filas */
 }
 
 .tabla-pacientes .tabla .estado-celda {
@@ -316,6 +334,27 @@ body {
     color: gray;
 }
 
+.estado-atendida {
+    background: green;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px 10px;
+}
+
+.estado-sin-atender {
+    background: red;
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    padding: 5px 10px;
+}
+
+/* Añade un borde redondeado a las celdas */
+.tabla-pacientes .tabla td, .tabla-pacientes .tabla th {
+    border: 1px solid #ddd; /* Bordes sutiles para cada celda */
+    border-radius: 5px; /* Bordes redondeados para celdas */
+}
 
 /* Estilos para la secicon de task*/
 
@@ -323,7 +362,7 @@ body {
 #tasks {
     display: flex;
     justify-content: space-between;
-    width: 83%;
+    width: 85%;
     height: 100%;
     border: 1px solid #B3B3B3;
     padding: 10px;

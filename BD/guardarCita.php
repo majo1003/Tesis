@@ -36,7 +36,6 @@ $stmtDisponibilidad->bind_param("isi", $doctor, $fecha, $hora);  // Se vinculan 
 $stmtDisponibilidad->execute();
 $resultadoDisponibilidad = $stmtDisponibilidad->get_result();
 
-
 // Si no hay disponibilidad, mostrar error
 if ($resultadoDisponibilidad->num_rows == 0) {
     echo "❌ El doctor no tiene disponibilidad para la fecha y hora seleccionada.";
@@ -57,6 +56,12 @@ $stmtCita = $conn->prepare($queryCita);
 $stmtCita->bind_param("sisiss", $fecha_hora, $doctor, $id_horario, $paciente, $tipo_enfermedad, $descripcion);
 $stmtCita->execute();
 
+// Actualizar el estado del horario en la tabla horariodisponibilidad a 0 (no disponible)
+$queryActualizarDisponibilidad = "UPDATE horariodisponibilidad SET estado = 0 WHERE id_horario = ?";
+$stmtActualizarDisponibilidad = $conn->prepare($queryActualizarDisponibilidad);
+$stmtActualizarDisponibilidad->bind_param("i", $id_horario);
+$stmtActualizarDisponibilidad->execute();
+
 // Confirmación de que la cita fue registrada correctamente
 echo "✔️ Cita registrada con éxito.";
 
@@ -64,5 +69,6 @@ echo "✔️ Cita registrada con éxito.";
 $stmtHora->close();
 $stmtDisponibilidad->close();
 $stmtCita->close();
+$stmtActualizarDisponibilidad->close();
 $conn->close();
 ?>

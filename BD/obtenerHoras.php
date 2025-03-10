@@ -6,84 +6,48 @@ if (!isset($_POST['doctor']) || !isset($_POST['fecha'])) {
     exit;
 }
 
-$doctor = $_POST['doctor'];
-$fecha = $_POST['fecha'];
+$doctor = (int) $_POST['doctor']; // Convertimos a entero para mayor seguridad
+$fecha = $_POST['fecha'];  // La fecha ya está en formato correcto
 
-// Consulta para obtener las franjas horarias y verificar su disponibilidad
+// Consulta SQL corregida: COALESCE(HD.estado, 0) evita valores NULL en 'estado'
 $sql = "SELECT H.id_hora, H.hora_inicio, H.hora_fin, 
-               IFNULL(HD.estado, 1) AS estado
+               COALESCE(HD.estado, 0) AS estado  -- Reemplaza NULL por 0
         FROM horas H
         LEFT JOIN horariodisponibilidad HD 
         ON H.id_hora = HD.id_hora 
-        AND HD.id_doctor = ? 
-        AND HD.fecha = ?";
+        AND HD.id_doctor = $doctor 
+        AND HD.fecha = '$fecha'  
+        ORDER BY H.hora_inicio";
 
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("is", $doctor, $fecha);
-$stmt->execute();
-$result = $stmt->get_result();
+$result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
-    echo "<ul>";
+    echo "<table class='hora-tabla'>";
+    echo "<tr><th>Horas Disponibles</th></tr>"; // Encabezado de la tabla
+    
     while ($row = $result->fetch_assoc()) {
-        $estado = $row['estado']; // 1 = Disponible, 0 = No disponible
-        $clase = ($estado == 0) ? "no-disponible" : "hora-fila";
-        $disabled = ($estado == 0) ? "disabled" : "";
+        // Convertimos 'estado' explícitamente a entero
+        $estado = (int) $row['estado'];
 
-        // Mostrar id_hora en el atributo data-id
-        echo "<li class='$clase hora-btn' onclick='seleccionarHora(this)' 
-                 data-id='" . htmlspecialchars($row['id_hora']) . "' $disabled>";
-        echo htmlspecialchars($row['hora_inicio']) . " - " . htmlspecialchars($row['hora_fin']);
-        echo "</li>";
+        // Definir la clase CSS en base al estado
+        $clase = ($estado === 0) ? "no-disponible" : "disponible";
+
+        // Solo los horarios disponibles tendrán el evento 'onclick'
+        $onclick = ($estado === 1) ? "onclick='seleccionarHora(this)'" : "";
+
+        // Mostrar la fila con las clases y atributos adecuados
+        echo "<tr class='$clase hora-btn' data-id='" . htmlspecialchars($row['id_hora']) . "' $onclick>";
+        echo "<td>" . htmlspecialchars($row['hora_inicio']) . " - " . htmlspecialchars($row['hora_fin']) . "</td>";
+        echo "</tr>";
     }
-    echo "</ul>";
+
+    echo "</table>";
 } else {
     echo "⚠️ No hay horarios disponibles.";
 }
 
-$stmt->close();
 $conn->close();
 ?>
-
-
-
-<style>
-.hora-tabla {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 10px;
-}
-
-.hora-tabla th, .hora-tabla td {
-    border: 2px solid black;
-    padding: 10px;
-    text-align: center;
-    cursor: pointer;
-}
-
-.hora-tabla tr:hover {
-    background-color: #f0f0f0;
-}
-
-/* Fila seleccionada */
-.hora-fila.seleccionada {
-    background-color: #4CAF50;
-    color: white;
-}
-
-/* Fila no disponible */
-.no-disponible {
-    background-color: red;
-    color: white;
-    cursor: not-allowed;
-}
-
-/* Evitar selección de horas no disponibles */
-.no-disponible:hover {
-    background-color: darkred;
-}
-
-</style>
 
 <script>
 

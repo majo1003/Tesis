@@ -1,5 +1,6 @@
 <?php
 session_start(); // Iniciar la sesión
+include 'BD/conexion.php';
 
 // Verificar si el usuario está autenticado como doctor
 if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor') {
@@ -8,8 +9,24 @@ if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor') {
     exit;
 }
 
+// Verificar si existe el ID del doctor en la sesión
+if (!isset($_SESSION['id_doctor'])) {
+    die("Error: ID del doctor no encontrado en la sesión.");
+}
+
 $id_doctor = $_SESSION['id_doctor'];
 
+// Obtener el nombre del doctor
+$queryDoctor = "SELECT CONCAT(nombre, ' ', apellido) AS nombre_completo FROM doctor WHERE id_doctor = ?";
+$stmtDoctor = $conn->prepare($queryDoctor);
+$stmtDoctor->bind_param("i", $id_doctor);
+$stmtDoctor->execute();
+$resultDoctor = $stmtDoctor->get_result();
+$nombreDoctor = "Doctor"; // Valor por defecto
+
+if ($row = $resultDoctor->fetch_assoc()) {
+    $nombreDoctor = $row['nombre_completo'];
+}
 ?>
 
 
@@ -35,15 +52,11 @@ $id_doctor = $_SESSION['id_doctor'];
 
     <header class="header-pantalla">
         <div class="titulo">
-            <h1>Bienvenido Administrador</h1>
+        <h1>Bienvenido <?php echo htmlspecialchars($nombreDoctor); ?></h1>
         </div>
 
         <div class="cerrar-sesion">
         <a href="BD/cerrarSesion.php" class="dr-buttonHeader">Cerrar Sesión</a>
-        </div>
-        
-        <div class="cerrar-sesion">
-            <button onclick="location.href='profilePaciente.html'">Profile</button>
         </div>
 
     </header>
@@ -87,17 +100,14 @@ $id_doctor = $_SESSION['id_doctor'];
                 </div>
                 <div id="modales-container"></div>
             </div>
-            <div class="buscar-paciente dr-gap20">
-                <label for="buscar">Nombre: </label>
-                <input type="text" name="buscar">
-                <button class="dr-button">Buscar</button>
-            </div>
+
             <div class="tabla-pacientes">
                 <table class="tabla">
                     <thead>
                         <tr>
                             <th>Nombre</th>
                             <th>ID</th>
+                            <th>Problema</th>
                             <th>Descripción</th>
                             <th>Estado</th>
                             <th>Acciones</th> <!-- Nueva columna para el botón -->
@@ -140,7 +150,9 @@ $id_doctor = $_SESSION['id_doctor'];
         <!-- Problemas y Archivos subidos -->
         <div class="problemas">
             <h2 class="dr-h1">Problemas</h2>
-            <div id="paciente-problems"></div>
+            <ul id="paciente-problems">
+                    <!-- Las archivos se cargarán dinámicamente con AJAX -->
+            </ul>
         </div>
         
     </div>
@@ -191,6 +203,13 @@ $id_doctor = $_SESSION['id_doctor'];
         <p>&copy; 2024 Maria Jose Encalada. Todos los derechos reservados.</p>
     </footer>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            console.log("jQuery cargado correctamente.");
+        });
+    </script>
+
     <script>
             function mostrarUbicacionPaciente(idPaciente) {
         fetch(`BD/getPacienteUbicacion.php?id=${idPaciente}`)
@@ -220,15 +239,15 @@ $id_doctor = $_SESSION['id_doctor'];
 
     // Llamada inicial para obtener los archivos cuando se carga la página
     document.addEventListener('DOMContentLoaded', function() {
-        const idCita = document.getElementById('idCita').value; // Obtener el ID de la cita desde el input
+        const idCita = document.getElementById('idCita').value;
         if (idCita) {
-            obtenerArchivos(idCita); // Obtener los archivos para esta cita al cargar la página
+            obtenerArchivos(idCita);
         }
     });
     </script>
 
 
-<script>
+    <script>
             // Espera a que todo el DOM esté completamente cargado
             document.addEventListener('DOMContentLoaded', function() {
             const element = document.getElementById("paciente-name");
@@ -241,121 +260,9 @@ $id_doctor = $_SESSION['id_doctor'];
                 console.log("El elemento no existe");
             }
         });
-</script>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", obtenerPacientes);
-
-        function obtenerPacientes() {
-            fetch('BD/getCitas.php')
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Respuesta completa:', data);
-
-                    try {
-                        const pacientes = JSON.parse(data);
-
-                        if (pacientes.error) {
-                            console.error('Error en el servidor:', pacientes.error);
-                            alert('Hubo un error al cargar los pacientes: ' + pacientes.error);
-                            return;
-                        }
-
-                        mostrarPacientes(pacientes);
-                    } catch (e) {
-                        console.error('Error al parsear JSON:', e);
-                        alert('Hubo un problema al cargar los pacientes.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al cargar los pacientes:', error);
-                    alert('Hubo un problema al cargar los pacientes.');
-                });
-        }
-
-        function mostrarPacientes(pacientes) {
-            const tablaPacientesBody = document.getElementById('tabla-pacientes-body');
-
-            tablaPacientesBody.innerHTML = '';
-
-            pacientes.forEach(paciente => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${paciente.paciente}</td>
-                    <td>${paciente.id_paciente}</td>
-                    <td>${paciente.descripcion}</td>
-                    <td>${paciente.atendida}</td>
-                    <td>
-                        <button 
-                            data-id="${paciente.id_paciente}" 
-                            data-id-cita="${paciente.id_cita}" 
-                            class="nav-link" 
-                            data-target="tasks">
-                            Ver tareas
-                        </button>
-                    </td>
-                `;
-                tablaPacientesBody.appendChild(row);
-            });
-
-            document.querySelectorAll('.nav-link').forEach(button => {
-                button.addEventListener('click', function() {
-                    const pacienteId = this.getAttribute('data-id');
-                    const citaId = this.getAttribute('data-id-cita');
-                    redirigirATareas(pacienteId, citaId);
-                });
-            });
-        }
-
-        function redirigirATareas(idPaciente, idCita) {
-            window.location.hash = `#tasks?id=${idPaciente}&id_cita=${idCita}`;
-            obtenerPaciente(idPaciente, idCita);
-        }
-
-        function obtenerPaciente(idPaciente, idCita) {
-            fetch(`BD/getPacientes.php?id=${idPaciente}&id_cita=${idCita}`)
-                .then(response => response.text())
-                .then(data => {
-                    console.log('Respuesta recibida:', data);
-
-                    try {
-                        const jsonData = JSON.parse(data);
-
-                        if (jsonData.error) {
-                            console.error("Error:", jsonData.error);
-                            alert(jsonData.error);
-                            return;
-                        }
-
-                        // Actualiza los datos en la página HTML
-                        if (jsonData.foto) {
-                            const fotoElement = document.getElementById('paciente-img');
-                            fotoElement.src = `data:image/jpeg;base64,${jsonData.foto}`;  // Usar jsonData.foto aquí
-                        }
-
-                        document.getElementById("nombre-enfermedad").textContent = jsonData.diagnostico || "No especificado";
-                        document.getElementById("paciente-name").textContent = `${jsonData.nombre || "Desconocido"}`;
-                        document.getElementById("paciente-name2").textContent = `${jsonData.nombre || "Desconocido"}`;
-                        document.getElementById("paciente-age").textContent = jsonData.edad || "No disponible";  // Edad del paciente
-                        document.getElementById("paciente-location").textContent = jsonData.ubicacion || "No especificada";  // Ubicación del paciente
-                        document.getElementById("paciente-status").textContent = jsonData.atendida === "Atendida" ? "Atendida" : "Sin atender";
-                        document.getElementById("paciente-description").textContent = jsonData.descripcion || "Desconocido";
-                        document.getElementById("hora-inicio").textContent = jsonData.hora_inicio || "No disponible";
-                        document.getElementById("hora-fin").textContent = jsonData.hora_fin || "No disponible";
-
-                    } catch (e) {
-                        console.error("Error al parsear JSON:", e);
-                    }
-                })
-                .catch(error => {
-                    console.error("Error en la solicitud:", error);
-                    alert('Hubo un problema al obtener los datos del paciente.');
-                });
-        }
-
-
-
     </script>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -370,7 +277,7 @@ $id_doctor = $_SESSION['id_doctor'];
 
     <script src="script/secciones.js"></script>
     <script src="script/ingresarDocumento.js"></script>
-    <!-- <script src="script/getpacientes.js"></script> -->
+    <script src="script/obtencionDatosPaciente.js"></script>
 
 </body>
 
