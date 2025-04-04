@@ -4,7 +4,6 @@ function obtenerPacientes() {
     fetch('BD/getCitas.php')
         .then(response => response.text())
         .then(data => {
-            console.log('Respuesta completa:', data);
 
             try {
                 const pacientes = JSON.parse(data);

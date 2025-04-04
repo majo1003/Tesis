@@ -1,71 +1,58 @@
-// Nota: Este ejemplo requiere que consientas compartir tu ubicación cuando 
-// sea solicitado por tu navegador. Si ves el error "El servicio de Geolocalización falló", 
-// significa que probablemente no diste permiso para que el navegador te localice.
+let map;
 
-let map, infoWindow;
+async function initMap(lat, lng) {
+  // Importar la librería de Google Maps
+  const { Map } = await google.maps.importLibrary("maps");
 
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: -0.1807, lng: -78.4678 },
-    zoom: 13,
+  // Crear el mapa con las coordenadas obtenidas
+  map = new Map(document.getElementById("map"), {
+    center: { lat, lng },
+    zoom: 15,
   });
-  infoWindow = new google.maps.InfoWindow();
+  
+  // Crear un marcador en el mapa
+  const marker = new google.maps.Marker({
+    position: { lat, lng },
+    map: map,
+    title: "Ubicación del Paciente"
+  });
 
-  const locationButton = document.createElement("button");
-  locationButton.textContent = "Ubicación en tiempo real";
-  locationButton.classList.add("custom-map-control-button");
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(locationButton);
-
-  locationButton.addEventListener("click", () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude,
-          };
-
-          // Datos adicionales
-          const accuracy = position.coords.accuracy; // Precisión en metros
-          const altitude = position.coords.altitude; // Altitud, puede ser null
-          const speed = position.coords.speed; // Velocidad en m/s, puede ser null
-          const timestamp = new Date(position.timestamp).toLocaleString(); // Fecha y hora
-
-          const contentString = `
-            <div>
-              <p><strong>Ubicación encontrada:</strong></p>
-              <p>Latitud: ${pos.lat.toFixed(6)}</p>
-              <p>Longitud: ${pos.lng.toFixed(6)}</p>
-              <p>Precisión: ${accuracy.toFixed(2)} metros</p>
-              ${altitude !== null ? `<p>Altitud: ${altitude.toFixed(2)} metros</p>` : ""}
-              ${speed !== null ? `<p>Velocidad: ${speed.toFixed(2)} m/s</p>` : ""}
-              <p>Hora de la localización: ${timestamp}</p>
-            </div>
-          `;
-
-          infoWindow.setPosition(pos);
-          infoWindow.setContent(contentString);
-          infoWindow.open(map);
-          map.setCenter(pos);
-        },
-        () => {
-          handleLocationError(true, infoWindow, map.getCenter());
-        },
-      );
-    } else {
-      handleLocationError(false, infoWindow, map.getCenter());
-    }
+  // Mostrar la información del marcador cuando se haga clic
+  const infoWindow = new google.maps.InfoWindow();
+  marker.addListener("click", function () {
+    infoWindow.setContent(`<div><p>Latitud: ${lat.toFixed(6)}</p><p>Longitud: ${lng.toFixed(6)}</p></div>`);
+    infoWindow.open(map, marker);
   });
 }
 
-function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-  infoWindow.setPosition(pos);
-  infoWindow.setContent(
-    browserHasGeolocation
-      ? "Error: El servicio de Geolocalización falló."
-      : "Error: Tu navegador no soporta geolocalización.",
-  );
-  infoWindow.open(map);
+// Función para obtener las coordenadas desde el servidor PHP
+function obtenerCoordenadas() {
+  fetch('/BD/getCoordenadas.php')
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.length > 0) {
+        // Obtener las coordenadas de la base de datos
+        let lat = parseFloat(data[0].latitud);
+        let lng = parseFloat(data[0].longitud);
+
+        // Asegurarse de que las coordenadas sean negativas por defecto
+        if (lat > 0) lat = -lat;
+        if (lng > 0) lng = -lng;
+
+        // Inicializar el mapa con las coordenadas obtenidas
+        initMap(lat, lng);
+      } else {
+        // Si no hay coordenadas en la base de datos, usar coordenadas predeterminadas negativas
+        alert("No se encontraron coordenadas. Usando coordenada predeterminada.");
+        initMap(-0.1807, -78.4678); // Coordenada predeterminada negativa (Ejemplo: Quito, Ecuador)
+      }
+    })
+    .catch(error => {
+      console.error('Error al obtener las coordenadas:', error);
+      // Si hay un error, usar coordenadas predeterminadas negativas
+      initMap(-0.1807, -78.4678); // Coordenada predeterminada negativa (Ejemplo: Quito, Ecuador)
+    });
 }
 
-window.initMap = initMap;
+// Llamar a la función para obtener las coordenadas y cargar el mapa
+obtenerCoordenadas();

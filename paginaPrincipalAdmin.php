@@ -59,6 +59,8 @@ if ($row = $resultDoctor->fetch_assoc()) {
         <a href="BD/cerrarSesion.php" class="dr-buttonHeader">Cerrar Sesión</a>
         </div>
 
+        <div id="alerta">¡Estás fuera del rango permitido!</div>
+
     </header>
 
 
@@ -278,6 +280,90 @@ if ($row = $resultDoctor->fetch_assoc()) {
     <script src="script/secciones.js"></script>
     <script src="script/ingresarDocumento.js"></script>
     <script src="script/obtencionDatosPaciente.js"></script>
+
+    <script>
+    // Coordenadas de referencia del Punto A (definidas en el código)
+    const latReferencia = -0.21;  // Latitud fija del punto A
+    const lonReferencia = -78.50; // Longitud fija del punto A
+
+    // Función para verificar si la longitud está dentro del rango
+    function verificarUbicacion(lat, lon) {
+        // Definimos el rango de longitud permitido (por ejemplo, +/- 0.5 grados)
+        const lonMin = lonReferencia - 0.5;  // Rango inferior
+        const lonMax = lonReferencia + 0.5;  // Rango superior
+
+        // Asegurarnos de que lon es un número
+        const lonNumerica = parseFloat(lon);
+        if (isNaN(lonNumerica)) {
+            console.error("La longitud no es un número válido:", lon);
+            return; // Salimos de la función si la longitud no es válida
+        }
+
+        // Redondear las coordenadas para evitar problemas de precisión
+        const lonRedondeada = parseFloat(lonNumerica.toFixed(5));
+        const lonMinRedondeado = parseFloat(lonMin.toFixed(5));
+        const lonMaxRedondeado = parseFloat(lonMax.toFixed(5));
+
+        // Mostrar las coordenadas verificadas y el rango permitido en la consola
+        console.log("Coordenadas verificadas: Latitud:", lat, "Longitud:", lonRedondeada);
+        console.log("Rango permitido: " + lonMinRedondeado + " a " + lonMaxRedondeado); // Mostrar el rango permitido
+
+        // Verificar si la longitud está dentro del rango permitido
+        if (lonRedondeada >= lonMinRedondeado && lonRedondeada <= lonMaxRedondeado) {
+            console.log("La longitud está dentro del rango permitido.");
+            ocultarAlerta();
+        } else {
+            console.log("La longitud está fuera del rango permitido.");
+            mostrarAlerta();
+        }
+    }
+
+    // Función para mostrar el mensaje de alerta
+    function mostrarAlerta() {
+        const alertaElement = document.getElementById('alerta');
+        if (alertaElement) {
+            alertaElement.style.display = 'block';
+        } else {
+            console.log("El elemento 'alerta' no se encuentra en el HTML.");
+        }
+    }
+
+    // Función para ocultar el mensaje de alerta
+    function ocultarAlerta() {
+        const alertaElement = document.getElementById('alerta');
+        if (alertaElement) {
+            alertaElement.style.display = 'none';
+        }
+    }
+
+    // Función para obtener las coordenadas del paciente desde el backend
+    function obtenerCoordenadasPaciente(idPaciente) {
+        fetch(`BD/getCoordenadas.php?id_paciente=${idPaciente}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length > 0) {
+                    const latPaciente = data[0].latitud;
+                    const lonPaciente = data[0].longitud;
+
+                    // Verificar si la longitud del paciente está dentro del rango
+                    verificarUbicacion(latPaciente, lonPaciente);
+                } else {
+                    alert('No se encontraron coordenadas para el paciente');
+                }
+            })
+            .catch(error => {
+                console.error('Error al obtener las coordenadas:', error);
+                alert('Hubo un problema al obtener las coordenadas.');
+            });
+    }
+
+    // Llamar a la función para obtener las coordenadas y verificar la ubicación
+    document.addEventListener('DOMContentLoaded', function () {
+        const idPaciente = 1; // Asumiendo que el ID del paciente es 1, ajusta según sea necesario
+        obtenerCoordenadasPaciente(idPaciente);
+    });
+</script>
+
 
 </body>
 

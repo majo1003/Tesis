@@ -17,6 +17,15 @@ body {
     display: none;
 }
 
+#alerta {
+    display: none;
+    background-color: #ffcc00;
+    color: black;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #cc9900;
+    border-radius: 5px;
+}
 
 .dr-h1-login {
     font-size: 3rem;
