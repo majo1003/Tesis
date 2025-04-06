@@ -282,87 +282,91 @@ if ($row = $resultDoctor->fetch_assoc()) {
     <script src="script/obtencionDatosPaciente.js"></script>
 
     <script>
-    // Coordenadas de referencia del Punto A (definidas en el código)
-    const latReferencia = -0.21;  // Latitud fija del punto A
-    const lonReferencia = -78.50; // Longitud fija del punto A
+// Coordenadas de referencia fijas (en decimal)
+const latReferencia = -0.207085;
+const lonReferencia = -78.489723;
 
-    // Función para verificar si la longitud está dentro del rango
-    function verificarUbicacion(lat, lon) {
-        // Definimos el rango de longitud permitido (por ejemplo, +/- 0.5 grados)
-        const lonMin = lonReferencia - 0.5;  // Rango inferior
-        const lonMax = lonReferencia + 0.5;  // Rango superior
+// Distancia máxima permitida (en metros)
+const distanciaMaxima = 20;
 
-        // Asegurarnos de que lon es un número
-        const lonNumerica = parseFloat(lon);
-        if (isNaN(lonNumerica)) {
-            console.error("La longitud no es un número válido:", lon);
-            return; // Salimos de la función si la longitud no es válida
-        }
+// Función para calcular la distancia entre dos puntos geográficos (fórmula Haversine)
+function calcularDistanciaEnMetros(lat1, lon1, lat2, lon2) {
+    const R = 6371000; // Radio de la Tierra en metros
+    const rad = Math.PI / 180;
 
-        // Redondear las coordenadas para evitar problemas de precisión
-        const lonRedondeada = parseFloat(lonNumerica.toFixed(5));
-        const lonMinRedondeado = parseFloat(lonMin.toFixed(5));
-        const lonMaxRedondeado = parseFloat(lonMax.toFixed(5));
+    const dLat = (lat2 - lat1) * rad;
+    const dLon = (lon2 - lon1) * rad;
 
-        // Mostrar las coordenadas verificadas y el rango permitido en la consola
-        console.log("Coordenadas verificadas: Latitud:", lat, "Longitud:", lonRedondeada);
-        console.log("Rango permitido: " + lonMinRedondeado + " a " + lonMaxRedondeado); // Mostrar el rango permitido
+    const a = Math.sin(dLat / 2) ** 2 +
+              Math.cos(lat1 * rad) * Math.cos(lat2 * rad) *
+              Math.sin(dLon / 2) ** 2;
 
-        // Verificar si la longitud está dentro del rango permitido
-        if (lonRedondeada >= lonMinRedondeado && lonRedondeada <= lonMaxRedondeado) {
-            console.log("La longitud está dentro del rango permitido.");
-            ocultarAlerta();
-        } else {
-            console.log("La longitud está fuera del rango permitido.");
-            mostrarAlerta();
-        }
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+}
+
+// Función para verificar la ubicación del paciente
+function verificarUbicacion(lat, lon) {
+    const latNumerica = parseFloat(lat);
+    const lonNumerica = parseFloat(lon);
+
+    if (isNaN(latNumerica) || isNaN(lonNumerica)) {
+        console.error("Coordenadas no válidas:", lat, lon);
+        return;
     }
 
-    // Función para mostrar el mensaje de alerta
-    function mostrarAlerta() {
-        const alertaElement = document.getElementById('alerta');
-        if (alertaElement) {
-            alertaElement.style.display = 'block';
-        } else {
-            console.log("El elemento 'alerta' no se encuentra en el HTML.");
-        }
+    const distancia = calcularDistanciaEnMetros(latReferencia, lonReferencia, latNumerica, lonNumerica);
+    console.log(`Distancia calculada: ${distancia.toFixed(2)} metros`);
+
+    if (distancia > distanciaMaxima) {
+        mostrarAlerta();
+    } else {
+        ocultarAlerta();
     }
+}
 
-    // Función para ocultar el mensaje de alerta
-    function ocultarAlerta() {
-        const alertaElement = document.getElementById('alerta');
-        if (alertaElement) {
-            alertaElement.style.display = 'none';
-        }
+// Mostrar alerta
+function mostrarAlerta() {
+    const alertaElement = document.getElementById('alerta');
+    if (alertaElement) {
+        alertaElement.style.display = 'block';
     }
+}
 
-    // Función para obtener las coordenadas del paciente desde el backend
-    function obtenerCoordenadasPaciente(idPaciente) {
-        fetch(`BD/getCoordenadas.php?id_paciente=${idPaciente}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.length > 0) {
-                    const latPaciente = data[0].latitud;
-                    const lonPaciente = data[0].longitud;
-
-                    // Verificar si la longitud del paciente está dentro del rango
-                    verificarUbicacion(latPaciente, lonPaciente);
-                } else {
-                    alert('No se encontraron coordenadas para el paciente');
-                }
-            })
-            .catch(error => {
-                console.error('Error al obtener las coordenadas:', error);
-                alert('Hubo un problema al obtener las coordenadas.');
-            });
+// Ocultar alerta
+function ocultarAlerta() {
+    const alertaElement = document.getElementById('alerta');
+    if (alertaElement) {
+        alertaElement.style.display = 'none';
     }
+}
 
-    // Llamar a la función para obtener las coordenadas y verificar la ubicación
-    document.addEventListener('DOMContentLoaded', function () {
-        const idPaciente = 1; // Asumiendo que el ID del paciente es 1, ajusta según sea necesario
-        obtenerCoordenadasPaciente(idPaciente);
-    });
+// Obtener coordenadas del paciente desde el backend
+function obtenerCoordenadasPaciente(idPaciente) {
+    fetch(`BD/getCoordenadas.php?id_paciente=${idPaciente}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length > 0) {
+                const latPaciente = parseFloat(data[0].latitud);
+                const lonPaciente = parseFloat(data[0].longitud);
+                verificarUbicacion(latPaciente, lonPaciente);
+            } else {
+                alert('No se encontraron coordenadas para el paciente');
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener las coordenadas:', error);
+            alert('Hubo un problema al obtener las coordenadas.');
+        });
+}
+
+// Iniciar la verificación al cargar la página
+document.addEventListener('DOMContentLoaded', function () {
+    const idPaciente = 1; // Ajustar según sea necesario
+    obtenerCoordenadasPaciente(idPaciente);
+});
 </script>
+
 
 
 </body>
