@@ -11,12 +11,27 @@ main {
     padding: 20px;
 }
 section {
-    width: 45%;
+    display: flex;
+    justify-content: center;
+    height: 100%;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+#Profile {
+    height: 100%;
+    width: 70%;
+}
+
+infoPaciente {
+display: flex;
+height: 100%;
+width: 300px;
+}
+
+
 section h2 {
     text-align: center;
 }

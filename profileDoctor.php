@@ -3,28 +3,28 @@ include 'BD/conexion.php';
 session_start();
 
 // Verificar si el usuario está autenticado y es un paciente
-if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'paciente') {
+if (!isset($_SESSION['user']) || $_SESSION['role'] !== 'doctor') {
     header("Location: index.php");
     exit;
 }
 
 // Verificar si existe el ID del paciente en la sesiAón
-if (!isset($_SESSION['id_paciente'])) {
-    die("Error: ID del paciente no encontrado en la sesión.");
+if (!isset($_SESSION['id_doctor'])) {
+    die("Error: ID del doctor no encontrado en la sesión.");
 }
 
-$id_paciente = $_SESSION['id_paciente'];
+$id_doctor = $_SESSION['id_doctor'];
 
-// Obtener el nombre del paciente
-$queryPaciente = "SELECT CONCAT(nombre, ' ', apellido) AS nombre_completo FROM paciente WHERE id_paciente = ?";
-$stmtPaciente = $conn->prepare($queryPaciente);
-$stmtPaciente->bind_param("i", $id_paciente);
-$stmtPaciente->execute();
-$resultPaciente = $stmtPaciente->get_result();
-$nombrePaciente = "Paciente"; // Valor por defecto
+// Obtener el nombre del doctor
+$queryDoctor = "SELECT CONCAT(nombre, ' ', apellido) AS nombre_completo FROM doctor WHERE id_doctor = ?";
+$stmtDoctor = $conn->prepare($queryDoctor);
+$stmtDoctor->bind_param("i", $id_doctor);
+$stmtDoctor->execute();
+$resultDoctor = $stmtDoctor->get_result();
+$nombreDoctor = "Doctor"; // Valor por defecto
 
-if ($row = $resultPaciente->fetch_assoc()) {
-    $nombrePaciente = $row['nombre_completo'];
+if ($row = $resultDoctor->fetch_assoc()) {
+    $nombreDoctor = $row['nombre_completo'];
 }
 ?>
 
@@ -41,11 +41,11 @@ if ($row = $resultPaciente->fetch_assoc()) {
     
     <header class="header-pantalla">
         <div class="titulo">
-        <h1>Bienvenido <?php echo htmlspecialchars($nombrePaciente); ?></h1>
+        <h1>Bienvenido <?php echo htmlspecialchars($nombreDoctor); ?></h1>
         </div>
 
         <div class="cerrar-sesion">
-            <a href="paginaPrincipalPaciente.php" class="dr-buttonHeader">Regresar</a>
+            <a href="paginaPrincipalAdmin.php" class="dr-buttonHeader">Regresar</a>
         </div>
 
         <div class="cerrar-sesion">
@@ -62,16 +62,14 @@ if ($row = $resultPaciente->fetch_assoc()) {
             <p><strong>Nombre:</strong> <span id="paciente-name">...</span></p>
             <p><strong>Apellido:</strong> <span id="paciente-apellido">...</span></p>
             <p><strong>Edad:</strong> <span id="paciente-age">...</span></p>
-            <p><strong>Ubicacion:</strong> <span id="paciente-location">...</span></p>
+            <p><strong>Ubicación:</strong> <span id="paciente-location">...</span></p>
             <button onclick="showEditProfile()">Edit Profile</button>
         </div>
     </section>
-
-
         <!-- Edit Profile Section -->
     <section id="editProfile" style="display: none;"> <!-- Ocultarlo inicialmente -->
         <h2>Edit Profile</h2>
-        <form id="editProfileForm" method="POST" action="BD/actualizarPaciente.php" enctype="multipart/form-data">
+        <form id="editProfileForm" method="POST" action="BD/actualizarDoctor.php" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="editPhoto">Photo</label>
                 <input type="file" name="foto" id="editPhoto" accept="image/jpeg, image/png">
@@ -100,6 +98,9 @@ if ($row = $resultPaciente->fetch_assoc()) {
     </section>
 
     </main>
+    <footer>
+        <p>&copy; 2024 Maria Jose Encalada. Todos los derechos reservados.</p>
+    </footer>
 
 <script>
     function showEditProfile() {
@@ -117,18 +118,18 @@ if ($row = $resultPaciente->fetch_assoc()) {
 
 
 <script>
-    const idPaciente = <?php echo json_encode($_SESSION['id_paciente']); ?>;
+    const idPaciente = <?php echo json_encode($_SESSION['id_doctor']); ?>;
 
     document.addEventListener("DOMContentLoaded", function () {
         if (idPaciente) {
             obtenerPaciente(idPaciente);
         } else {
-            console.error("ID del paciente no está definido.");
+            console.error("ID del doctor no está definido.");
         }
     });
 
     function obtenerPaciente(idPaciente) {
-    fetch(`BD/getPacienteInfo.php?id=${idPaciente}`)
+    fetch(`BD/getDoctorInfo.php?id=${idPaciente}`)
         .then(response => response.text())
         .then(data => {
             console.log('Respuesta recibida:', data);

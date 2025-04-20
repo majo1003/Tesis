@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Cifrar la contraseña
+    // Cifrar la contraseña (con hash)
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
     // Consulta SQL para insertar el paciente

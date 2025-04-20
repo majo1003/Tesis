@@ -48,7 +48,7 @@
                         <button type="submit">Registro</button>
                     </form>
                     <p class="login-link">
-                        ¿Ya tienes una cuenta? <a href="index.php">Iniciar Sesión</a>
+                        ¿Ya tienes una cuenta? <a href="../index.php">Iniciar Sesión</a>
                     </p>
                 </div>
             </div>

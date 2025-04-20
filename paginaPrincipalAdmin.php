@@ -56,7 +56,11 @@ if ($row = $resultDoctor->fetch_assoc()) {
         </div>
 
         <div class="cerrar-sesion">
-        <a href="BD/cerrarSesion.php" class="dr-buttonHeader">Cerrar Sesión</a>
+            <a href="profileDoctor.php" class="dr-buttonHeader">Editar Perfil</a>
+        </div>
+
+        <div class="cerrar-sesion">
+            <a href="BD/cerrarSesion.php" class="dr-buttonHeader">Cerrar Sesión</a>
         </div>
 
         <div id="alerta">¡Estás fuera del rango permitido!</div>
@@ -88,39 +92,51 @@ if ($row = $resultDoctor->fetch_assoc()) {
         </header>
 
         <section id="calendar">
+            <!-- Modal para mostrar la descripción de la cita -->
+<div id="citaModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Detalles de la Cita</h2>
+        <p id="descripcionCita"></p>
+        <p><strong>Fecha y Hora: </strong><span id="fechaHoraCita"></span></p>
+    </div>
+</div>
+
             <div>
                 <h2>Calendario</h2>
                 <div id="calendario"></div>
             </div>
         </section>
 
-        <section id="clientes" class="dr-gap20">
-            <div class="lista-paciente">
-                <div class="titulo">
-                    <h1 class="dr-h1">Lista de pacientes</h1>
-                    <span id="totalPaciente" class="dr-span"></span>
-                </div>
-                <div id="modales-container"></div>
-            </div>
+<section id="clientes" class="dr-gap20">
+    <div class="lista-paciente">
+        <div class="titulo">
+            <h1 class="dr-h1">Lista de pacientes</h1>
+            <span id="totalPaciente" class="dr-span"></span>
+        </div>
+        <div id="modales-container"></div>
+    </div>
 
-            <div class="tabla-pacientes">
-                <table class="tabla">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>ID</th>
-                            <th>Problema</th>
-                            <th>Descripción</th>
-                            <th>Estado</th>
-                            <th>Acciones</th> <!-- Nueva columna para el botón -->
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-pacientes-body">
-                        <!-- Aquí se llenarán los pacientes dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
-        </section>
+    <div class="tabla-pacientes">
+        <table class="tabla">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>ID</th>
+                    <th>Problema</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-pacientes-body">
+                <!-- Aquí se llenarán los pacientes dinámicamente -->
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
 
         <section id="tasks" class="dr-gap10">
 
@@ -151,7 +167,7 @@ if ($row = $resultDoctor->fetch_assoc()) {
 
         <!-- Problemas y Archivos subidos -->
         <div class="problemas">
-            <h2 class="dr-h1">Problemas</h2>
+            <h2 class="dr-h1">Soluciones Clínicas</h2>
             <ul id="paciente-problems">
                     <!-- Las archivos se cargarán dinámicamente con AJAX -->
             </ul>
@@ -267,14 +283,41 @@ if ($row = $resultDoctor->fetch_assoc()) {
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                events: 'https://fullcalendar.io/api/demo-feeds/events.json'
-            });
-            calendar.render();
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            events: {
+                url: 'BD/eventos.php',
+                failure: function() {
+                    console.error("❌ No se pudo cargar eventos desde eventos.php");
+                }
+            },
+            loading: function(isLoading) {
+                if (isLoading) {
+                    console.log("⏳ Cargando eventos...");
+                } else {
+                    console.log("✅ Eventos cargados");
+                }
+            },
+            eventDidMount: function(info) {
+                console.log("📅 Evento montado:", info.event);
+            },
+            eventClick: function(info) {
+                alert(`
+                    Descripción: ${info.event.title}
+                    Fecha y Hora: ${info.event.start.toLocaleString()}
+                    Tipo de Enfermedad: ${info.event.extendedProps.tipo_enfermedad}
+                    Atendida: ${info.event.extendedProps.atendida == 1 ? 'Sí' : 'No'}
+                `);
+            }
         });
+
+        calendar.render();
+    });
+
     </script>
 
     <script src="script/secciones.js"></script>
@@ -351,7 +394,6 @@ function obtenerCoordenadasPaciente(idPaciente) {
                 const lonPaciente = parseFloat(data[0].longitud);
                 verificarUbicacion(latPaciente, lonPaciente);
             } else {
-                alert('No se encontraron coordenadas para el paciente');
             }
         })
         .catch(error => {

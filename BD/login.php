@@ -24,16 +24,38 @@ $result_paciente = $stmt_paciente->get_result();
 $paciente = $result_paciente->fetch_assoc();
 
 if ($paciente) {
-    if ($contrasena === $paciente['contraseña']) {
-        $_SESSION['user'] = $paciente;
-        $_SESSION['id_doctor'] = $doctor['id_doctor']; // Guarda el ID del doctor en sesión
-        $_SESSION['id_paciente'] = $paciente['id_paciente']; // Guarda el ID del paciente en sesión
-        $_SESSION['role'] = 'paciente';
-        header("Location: ../paginaPrincipalPaciente.php");
-        exit;
+    // Verificar si la contraseña está hasheada
+    if (strlen($paciente['contraseña']) == 60) { // Si la longitud es 60, se supone que está hasheada
+        // Verificar si la contraseña ingresada coincide con el hash de la base de datos
+        if (password_verify($contrasena, $paciente['contraseña'])) {
+            $_SESSION['user'] = $paciente;
+            $_SESSION['id_paciente'] = $paciente['id_paciente']; // Guarda el ID del paciente en sesión
+            $_SESSION['role'] = 'paciente';
+            header("Location: ../paginaPrincipalPaciente.php");
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
+            exit;
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
-        exit;
+        // Si la contraseña no está hasheada, comparar directamente con la base de datos (sin hashing)
+        if ($contrasena === $paciente['contraseña']) {
+            // Hashear la contraseña y actualizar la base de datos
+            $hashedPassword = password_hash($contrasena, PASSWORD_DEFAULT);
+            $sql_update = "UPDATE paciente SET contraseña = ? WHERE correo = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param('ss', $hashedPassword, $correo);
+            $stmt_update->execute();
+
+            $_SESSION['user'] = $paciente;
+            $_SESSION['id_paciente'] = $paciente['id_paciente']; // Guarda el ID del paciente en sesión
+            $_SESSION['role'] = 'paciente';
+            header("Location: ../paginaPrincipalPaciente.php");
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
+            exit;
+        }
     }
 }
 
@@ -46,16 +68,38 @@ $result_doctor = $stmt_doctor->get_result();
 $doctor = $result_doctor->fetch_assoc();
 
 if ($doctor) {
-    if ($contrasena === $doctor['contraseña']) {
-        $_SESSION['user'] = $doctor;
-        $_SESSION['role'] = 'doctor';
-        $_SESSION['id_doctor'] = $doctor['id_doctor']; // Guarda el ID del doctor en sesión
-        $_SESSION['id_paciente'] = $paciente['id_paciente']; // Guarda el ID del paciente en sesión
-        header("Location: ../paginaPrincipalAdmin.php");
-        exit;
+    // Verificar si la contraseña está hasheada
+    if (strlen($doctor['contraseña']) == 60) { // Si la longitud es 60, se supone que está hasheada
+        // Verificar si la contraseña ingresada coincide con el hash de la base de datos
+        if (password_verify($contrasena, $doctor['contraseña'])) {
+            $_SESSION['user'] = $doctor;
+            $_SESSION['role'] = 'doctor';
+            $_SESSION['id_doctor'] = $doctor['id_doctor']; // Guarda el ID del doctor en sesión
+            header("Location: ../paginaPrincipalAdmin.php");
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
+            exit;
+        }
     } else {
-        echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
-        exit;
+        // Si la contraseña no está hasheada, comparar directamente con la base de datos (sin hashing)
+        if ($contrasena === $doctor['contraseña']) {
+            // Hashear la contraseña y actualizar la base de datos
+            $hashedPassword = password_hash($contrasena, PASSWORD_DEFAULT);
+            $sql_update = "UPDATE doctor SET contraseña = ? WHERE correo = ?";
+            $stmt_update = $conn->prepare($sql_update);
+            $stmt_update->bind_param('ss', $hashedPassword, $correo);
+            $stmt_update->execute();
+
+            $_SESSION['user'] = $doctor;
+            $_SESSION['role'] = 'doctor';
+            $_SESSION['id_doctor'] = $doctor['id_doctor']; // Guarda el ID del doctor en sesión
+            header("Location: ../paginaPrincipalAdmin.php");
+            exit;
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Contraseña incorrecta']);
+            exit;
+        }
     }
 }
 

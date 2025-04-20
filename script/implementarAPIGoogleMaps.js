@@ -43,7 +43,6 @@ function obtenerCoordenadas() {
         initMap(lat, lng);
       } else {
         // Si no hay coordenadas en la base de datos, usar coordenadas predeterminadas negativas
-        alert("No se encontraron coordenadas. Usando coordenada predeterminada.");
         initMap(-0.1807, -78.4678); // Coordenada predeterminada negativa (Ejemplo: Quito, Ecuador)
       }
     })

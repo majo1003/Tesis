@@ -58,14 +58,19 @@ $resultDoctores = $conn->query($sqlDoctores);
 </head>
 <body>
 
-<header class="cabezera-usuario">
+<header class="header-pantalla">
     <div class="titulo">
     <h1>Bienvenido <?php echo htmlspecialchars($nombrePaciente); ?></h1>
     </div>
 
     <div class="cerrar-sesion">
+    <a href="profilePaciente.php" class="dr-buttonHeader">Editar Perfil</a>
+    </div>
+
+    <div class="cerrar-sesion">
     <a href="BD/cerrarSesion.php" class="dr-buttonHeader">Cerrar Sesión</a>
     </div>
+    
 </header>
 
 <main class="usuario-principal">

@@ -186,11 +186,13 @@
     }
 
     .horas-disponibles .disponible {
-        color: green;
+        color: rgb(197, 27, 160);
     }
 
     .horas-disponibles .hora-seleccionada {
-        background-color: #c4f7d6;
+        background-color: #1d1f1e;
         padding: 2px 6px;
         border-radius: 4px;
     }
+
+    

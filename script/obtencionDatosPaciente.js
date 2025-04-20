@@ -28,17 +28,13 @@ function obtenerPacientes() {
 
 function mostrarPacientes(pacientes) {
     const tablaPacientesBody = document.getElementById('tabla-pacientes-body');
-
     tablaPacientesBody.innerHTML = '';
 
     pacientes.forEach(paciente => {
-        // Determina la clase en función del estado de la cita
-        let claseEstado = '';
-        if (paciente.atendida === 'Atendido') {
-            claseEstado = 'estado-atendida'; // Verde
-        } else if (paciente.atendida === 'No atendido') {
-            claseEstado = 'estado-sin-atender'; // Rojo
-        }
+        const atendidaTexto = paciente.atendida;
+        const atendidaValor = atendidaTexto === 'Atendido' ? 1 : 0;
+        const isChecked = atendidaValor === 1 ? 'checked' : '';
+        const claseEstado = atendidaValor === 1 ? 'estado-atendida' : 'estado-sin-atender';
 
         const row = document.createElement('tr');
         row.innerHTML = `
@@ -46,7 +42,20 @@ function mostrarPacientes(pacientes) {
             <td>${paciente.id_paciente}</td>
             <td>${paciente.tipo_enfermedad}</td>
             <td>${paciente.descripcion}</td>
-            <td class="${claseEstado}">${paciente.atendida}</td>
+            <td class="${claseEstado}">
+                <label>
+                    <input type="checkbox" 
+                        class="checkbox-atendida"
+                        data-id-cita="${paciente.id_cita}"
+                        ${isChecked}> Atendida
+                </label>
+                <br>
+                <button class="guardar-cambio-btn dr-button mini"
+                        data-id-cita="${paciente.id_cita}"
+                        disabled>
+                    Guardar
+                </button>
+            </td>
             <td>
                 <button 
                     data-id="${paciente.id_paciente}" 
@@ -60,14 +69,60 @@ function mostrarPacientes(pacientes) {
         tablaPacientesBody.appendChild(row);
     });
 
+    // Activar botón cuando se modifica checkbox
+    document.querySelectorAll('.checkbox-atendida').forEach(cb => {
+        cb.addEventListener('change', function () {
+            const btn = this.closest('td').querySelector('.guardar-cambio-btn');
+            btn.disabled = false;
+        });
+    });
+
+    // Guardar cambio de estado
+    document.querySelectorAll('.guardar-cambio-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const idCita = this.getAttribute('data-id-cita');
+            const checkbox = this.closest('td').querySelector('.checkbox-atendida');
+            const atendida = checkbox.checked ? 1 : 0;
+            const botonGuardar = this;
+
+            const formData = new FormData();
+            formData.append('id_cita', idCita);
+            formData.append('atendida', atendida);
+
+            fetch('BD/actualizar_estado_cita.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    const celda = botonGuardar.closest('td');
+                    celda.className = atendida === 1 ? 'estado-atendida' : 'estado-sin-atender';
+                    botonGuardar.disabled = true;
+                    alert('Estado actualizado correctamente');
+                } else {
+                    alert('Error al actualizar el estado: ' + (data.error || 'Desconocido'));
+                }
+            })
+            .catch(err => {
+                console.error('Fetch error:', err);
+                alert('No se pudo conectar al servidor.');
+            });
+        });
+    });
+
+    // Navegar a tareas
     document.querySelectorAll('.nav-link').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const pacienteId = this.getAttribute('data-id');
             const citaId = this.getAttribute('data-id-cita');
             redirigirATareas(pacienteId, citaId);
         });
     });
 }
+
+
+
 
 
 
@@ -168,5 +223,4 @@ function obtenerPaciente(idPaciente, idCita) {
             alert('Hubo un problema al obtener los datos del paciente.');
         });
 }
-
 
