@@ -2,7 +2,7 @@
 include 'conexion.php';
 
 // Verificar si se han enviado los parámetros requeridos
-if (!isset($_POST['doctor']) || !isset($_POST['fecha']) || !isset($_POST['hora']) || !isset($_POST['paciente']) || !isset($_POST['tipo_enfermedad']) || !isset($_POST['descripcion'])) {
+if (!isset($_POST['doctor']) || !isset($_POST['fecha']) || !isset($_POST['hora']) || !isset($_POST['paciente']) || !isset($_POST['descripcion'])) {
     echo "❌ Faltan parámetros: doctor, fecha, hora, paciente, tipo de enfermedad o descripción";
     exit;
 }
@@ -11,7 +11,6 @@ $doctor = $_POST['doctor'];
 $fecha = $_POST['fecha'];
 $hora = $_POST['hora'];  // Cambiado de horaSeleccionada a hora
 $paciente = $_POST['paciente'];
-$tipo_enfermedad = $_POST['tipo_enfermedad'];
 $descripcion = $_POST['descripcion'];
 
 // Verificar que la hora seleccionada existe en la tabla Horas
@@ -50,10 +49,10 @@ $id_horario = $row['id_horario'];
 $fecha_hora = $fecha . ' ' . $hora . ':00:00';
 
 // Aquí puedes realizar la inserción de la cita, por ejemplo:
-$queryCita = "INSERT INTO cita (fecha_hora, id_doctor, id_horario, id_paciente, tipo_enfermedad, descripcion) 
-              VALUES (?, ?, ?, ?, ?, ?)";
+$queryCita = "INSERT INTO cita (fecha_hora, id_doctor, id_horario, id_paciente, descripcion) 
+              VALUES (?, ?, ?, ?, ?)";
 $stmtCita = $conn->prepare($queryCita);
-$stmtCita->bind_param("sisiss", $fecha_hora, $doctor, $id_horario, $paciente, $tipo_enfermedad, $descripcion);
+$stmtCita->bind_param("sisis", $fecha_hora, $doctor, $id_horario, $paciente, $descripcion);
 $stmtCita->execute();
 
 // Actualizar el estado del horario en la tabla horariodisponibilidad a 0 (no disponible)
