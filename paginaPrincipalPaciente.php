@@ -43,6 +43,22 @@ $result = $stmt->get_result();
 // Obtener los doctores disponibles
 $sqlDoctores = "SELECT id_doctor, CONCAT(nombre, ' ', apellido) AS nombre_completo FROM doctor";
 $resultDoctores = $conn->query($sqlDoctores);
+
+//Obtener los medicamentos registrados
+$sqlMedicamentos = "SELECT nombre_medicamento, dosis, hora, dia FROM medicamentos WHERE id_paciente = $id_paciente";
+$resultMedicamentos = $conn->query($sqlMedicamentos);
+
+$medicamentos = [];
+
+if ($resultMedicamentos && $resultMedicamentos->num_rows > 0) {
+    while($row = $resultMedicamentos->fetch_assoc()) {
+        $medicamentos[] = $row;
+    }
+}
+
+// Pasar a JavaScript como JSON
+echo "<script>const medicamentosRegistrados = " . json_encode($medicamentos) . "; </script>";    
+
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +71,21 @@ $resultDoctores = $conn->query($sqlDoctores);
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Mis Citas</title>
+    <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      text-align: center;
+    }
+
+    td {
+      border: 1px solid #999;
+      padding: 6px;
+      vertical-align: top;
+    }
+
+   
+    </style>
 </head>
 <body>
 
@@ -164,7 +195,7 @@ $resultDoctores = $conn->query($sqlDoctores);
 </div>
 
 <!-- Modal Calendario-->
-<div id="modalCalendario" class="modal" style="display: none;">
+<div id="modalCalendario" class="modal" style="display: none; min-width: 1000px;">
     <div class="modal-content">
         <span class="close" id="cerrarModalCalendario">&times;</span>
         <h2 class="modal-title">Registro de medicamento</h2>
@@ -255,6 +286,7 @@ $resultDoctores = $conn->query($sqlDoctores);
 
 
 <script>
+    console.log(medicamentosRegistrados);
 $(document).ready(function () {
     // Asegura que el modal esté oculto al cargar la página
     $("#modalReserva").hide();  
@@ -400,24 +432,59 @@ const dias = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "
     const row = document.createElement("tr");
     
     // Celda con la hora
-    const horaCelda = document.createElement("td");
+    const horaCelda = document.createElement("td"); 
     const formatoHora = (hora <= 12 ? hora : hora - 12) + (hora < 12 ? " AM" : " PM");
-    const formatoHora2 = `${hora}:00:00`
+    const formatoHora2 = hora.toString().padStart(2, '0')+":00:00"
     horaCelda.textContent = formatoHora2;
     row.appendChild(horaCelda);
 
     // Celdas con botones para cada día
+
     dias.forEach(dia => {
       const td = document.createElement("td");
+
+      const med = medicamentosRegistrados.find(m => m.dia === dia && m.hora === formatoHora2);
+      console.log(`${medicamentosRegistrados}`);
+
       const boton = document.createElement("button");
       boton.textContent = "X";
-      boton.type = "button"
+      boton.type = "button";
+      boton.style.paddingTop = "0px"
+      boton.style.paddingBottom = "0px"
+      boton.style.maxHeight = "20px"
+
+      if (med) {
+        boton.textContent = 'X';
+        boton.style.backgroundColor = "#d1bae3"; // verde claro
+
+        // Crear etiqueta de dosis fuera del botón
+        const etiquetaDosis1 = document.createElement("div");
+        etiquetaDosis1.innerHTML = `<strong> ${med.nombre_medicamento}</strong>`;
+        etiquetaDosis1.style.fontSize = "11px";
+        etiquetaDosis1.style.marginTop = "4px";
+        etiquetaDosis1.style.color = "#333";
+        etiquetaDosis1.style.border = "1px"
+
+        const etiquetaDosis = document.createElement("div");
+        etiquetaDosis.textContent = `Dosis: ${med.dosis}`;
+        etiquetaDosis.style.fontSize = "11px";
+        etiquetaDosis.style.marginTop = "4px";
+        etiquetaDosis.style.color = "#333";
+        
+        td.appendChild(etiquetaDosis1);
+        td.appendChild(etiquetaDosis);
+        td.appendChild(boton);
+      } else {
+        boton.textContent = "X";
+        td.appendChild(boton);
+      }
+
       boton.onclick = () => {
         alert(`Día: ${dia}\nHora: ${formatoHora}`);
         const celdaInfo = document.getElementById("hora").value = `${formatoHora2}`;
         const celdaInfoDia = document.getElementById("dia").value = `${dia}`;
       };
-      td.appendChild(boton);
+      
       row.appendChild(td);
     });
 
